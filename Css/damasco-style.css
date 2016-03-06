@@ -1,0 +1,67 @@
+@import url("bootstrap.min.css");
+
+h3{margin-bottom: 5px;
+    margin-top: 10px;}
+.hero-unit {
+    background-color: #eeeeee;
+    border-radius: 6px;
+    color: inherit;
+    font-size: 18px;
+    font-weight: 200;
+    line-height: 15px;
+    margin-bottom: 30px;
+    padding: 35px;
+}
+
+.navbar .nav > li > a:focus, .navbar .nav > li > a:hover {
+  background-color: #5bb75b;
+    background-image: linear-gradient(to bottom, #62c462, #51a351);
+    background-repeat: repeat-x;
+    border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+    color: #fff;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+	visibility:visible
+}
+
+.nav li:hover > ul {display:block}
+
+.dropdown-menu{margin: 0px 0 0;}
+
+#productDetail input {
+    border: 1px solid #cecece;
+    color: #949494;
+    font-family: Arial,Verdana,Helvetica,sans-serif;
+    font-size: 11px;
+    padding: 6px;
+    width: 220px;
+	}
+
+.container{width:900px}
+
+h1{text-align:center; color:#337ab7; margin-top:-30px}
+
+select {
+    width: 220px;
+    background-color: #ffffff;
+    border: 1px solid #cccccc;
+	height:30px;
+	line-height: 30px;
+}
+
+input.suppliers{
+	width: 220px;
+	line-height:30px;
+	height:30px
+	}
+	
+	.table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th {
+    padding: 8px;
+    line-height: 1.42857143;
+    vertical-align: middle;
+	border-top:none;
+	border-bottom:dashed 1px #999;
+	}
+
+tr.table{
+	height:25px
+	}
