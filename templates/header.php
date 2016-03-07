@@ -25,8 +25,8 @@
       <div class="container-fluid">
         <ul class="nav navbar-nav">
           <li><a href="?action=search">Home</a></li>
-          <li><a href="?action=add_sku">Add</a></li>
-          <li><a href="?action=aisles&Aisle=2">Aisles</a></li>
+          <li><a href="?action=add_product_location">Add</a></li>
+          <li><a href="?action=aisles&aisle=2">Aisles</a></li>
           <?php 
 		  if (!isset($_COOKIE['password'])){ 
 		  }

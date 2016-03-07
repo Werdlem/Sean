@@ -245,6 +245,22 @@ class products{
 			
 				}			
 		}
+		
+			public function GetAisle($aisle){
+		$pdo = Database::DB();
+		$stmt = $pdo->prepare('Select * 
+		from location 
+		left join products on location.sku_id=products.sku_id 
+		where location_name
+		like :stmt 
+		order by length(location_name),location_name');
+		$stmt->bindValue(':stmt', $aisle."%");
+		$stmt->execute();
+		while($results = $stmt->fetchAll(PDO::FETCH_ASSOC))
+		{
+			return $results;
+		}
+	}
 			
 	
 	//--------------------------------------------------------------------------------------------------------------------------------------------------//
@@ -267,21 +283,7 @@ class products{
 		}
 	}
 	
-	public function GetAisle($Aisle){
-		$pdo = Database::DB();
-		$stmt = $pdo->prepare('Select * 
-		from location 
-		left join products on location.product_id=products.product_id 
-		where location 
-		like :stmt 
-		order by length(location),location');
-		$stmt->bindValue(':stmt', $Aisle."%");
-		$stmt->execute();
-		while($results = $stmt->fetchAll(PDO::FETCH_ASSOC))
-		{
-			return $results;
-		}
-	}
+
 	
 	public function GetLocation($id){
 		$pdo = Database::DB();
