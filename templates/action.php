@@ -19,7 +19,7 @@ if(isset($_POST['updates'])){
 	$alias_2 = $_POST['alias_2'];
 	$alias_3 = $_POST['alias_3'];
 	
-	$productDal->UpdateProduct($sku_id, $sku,$notes,$buffer_qty, $allocation_id, $supplier_id ,$description, $alias_1, $alias_2, $alias_3);
+	$productDal->UpdateProduct($sku_id, $sku,$notes,$buffer_qty, $allocation_id, $supplier_id,$description, $alias_1, $alias_2, $alias_3, $stock_qty);
 	header("location:?action=update_product&sku=".$sku."&sku_id=".$sku_id);
 }
 
@@ -55,6 +55,25 @@ if (isset($_GET['delete_sku'])){
 		$productDal->Remove_Location($id);
 	header("Location: ?action=update_product&sku=".$sku."&sku_id=".$sku_id."&location_id=".$id);
 	}
+	
+	if(isset($_POST['add_sku'])){
+	 
+	
+$sku = strtoupper($_POST['sku']);
+$pack_qty = $_POST['pack_qty'];
+$alias_1 = strtoupper($_POST['alias_1']);
+$alias_2 = strtoupper($_POST['alias_2']);
+$alias_3 = strtoupper($_POST['alias_3']);
+$customer = strtoupper($_POST['customer']);
+$notes = nl2br($_POST['notes']);
+$stock_qty = $_POST['stock_qty'];
+$buffer_quantity = $_POST['buffer_quantity'];
+$description = nl2br($_POST['description']);
+$last_ordered = $_POST['last_ordered'];
+
+$productDal->Add_Sku($sku, $pack_qty, $alias_1, $alias_2, $alias_3, $allocation_id, $description, $stock_qty, $buffer_qty, $notes);
+header('location:?action=update_product&sku='.$sku.'&sku_id=');
+}
 
 
 

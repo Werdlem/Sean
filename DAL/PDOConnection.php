@@ -201,6 +201,50 @@ class products{
 		$stmt->bindValue(2, $today);
 		$stmt->execute();
 		}
+		
+		public function EmptyLocations(){
+			$pdo = Database::DB();
+			$stmt = $pdo->query('select * from location
+			where sku_id
+			like "0"');
+			$stmt->execute();
+			if($stmt->rowCount()> 'null'){
+			while($results = $stmt->fetchAll(PDO::FETCH_ASSOC))
+		{
+			return $results;
+		}
+			}
+		else{
+			die ("No Empty Locations Avaliable!");
+			}		
+		}
+		
+		public function Add_Sku($sku, $pack_qty, $alias_1, $alias_2, $alias_3, $allocation_id, $description, $stock_qty, $buffer_qty, $notes){
+			$pdo = Database::DB();
+		try{
+			$stmt = $pdo->prepare('insert
+			into products
+			(sku, pack_qty, alias_1, alias_2, alias_3, allocation_id, description, stock_qty, buffer_qty, notes)
+			values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+			$stmt->bindValue(1, $sku);
+			$stmt->bindValue(2, $pack_qty);
+			$stmt->bindValue(3, $alias_1);
+			$stmt->bindValue(4, $alias_2);
+			$stmt->bindValue(5, $alias_3);
+			$stmt->bindValue(6, $allocation_id);
+			$stmt->bindValue(7, $description);
+			$stmt->bindValue(8, $stock_qty);
+			$stmt->bindValue(9, $buffer_qty);
+			$stmt->bindValue(10, $notes);
+			$stmt->execute();
+			echo '<div class="alert alert-success" role="alert">The product '.$sku . ' has been sucessfully added!</div>';	}	
+			
+			catch (PDOException $e){
+
+				echo '<div class="alert alert-danger" role="alert">'. $e .'</div>';
+			
+				}			
+		}
 			
 	
 	//--------------------------------------------------------------------------------------------------------------------------------------------------//
@@ -310,22 +354,7 @@ class products{
 		
 		}
 			
-		public function EmptyLocations(){
-			$pdo = Database::DB();
-			$stmt = $pdo->query('select * from location
-			where product_id
-			is null');
-			$stmt->execute();
-			if($stmt->rowCount()> 'null'){
-			while($results = $stmt->fetchAll(PDO::FETCH_ASSOC))
-		{
-			return $results;
-		}
-			}
-		else{
-			die ("No Empty Locations Avaliable!");
-			}		
-		}
+		
 			
 		public function AddLocation($location){
 			$pdo = Database::DB();
@@ -351,27 +380,7 @@ class products{
 			$stmt->execute();				
 				}
 				
-		public function AddProduct($product, $notes, $quantity, $description, $last_ordered){
-			$pdo = Database::DB();
-		try{
-			$stmt = $pdo->prepare('insert
-			into products
-			(product, notes, quantity, description, last_ordered)
-			values (?, ?, ?, ?, ?)');
-			$stmt->bindValue(1, $product);
-			$stmt->bindValue(2, $notes);
-			$stmt->bindValue(3, $quantity);
-			$stmt->bindValue(4, $description);
-			$stmt->bindValue(5, $last_ordered);
-			$stmt->execute();
-			echo '<div class="alert alert-success" role="alert">The product '.$product . ' has been sucessfully added!</div>';	}	
-			
-			catch (PDOException $e){
-
-				echo '<div class="alert alert-danger" role="alert">'. $e .'</div>';
-			
-				}			
-		}
+		
 		
 		public function ProductDelete($product){				
 			$pdo= Database::DB();

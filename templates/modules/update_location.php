@@ -7,10 +7,6 @@ $productDal = new products();
 
 $isEditing = isset($_GET['id']);
 
-
-
-
-
 if ($_GET['sku_id']==''){
 	$id = $_GET['sku'];
 	$id = $productDal->GetProducts($id);
