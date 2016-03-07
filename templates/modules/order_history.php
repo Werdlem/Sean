@@ -6,7 +6,7 @@ if ($_GET['sku_id'] == ''){
 	$sku = $_GET['sku'];
 	$sku = $productDal->GetProducts($sku);
 	foreach ($sku as $result){
-		$sku = $result['product_id'];
+		$sku_id = $result['sku_id'];
 		}
 	}
 

@@ -3,13 +3,16 @@ require_once "DAL/settings.php";
  require_once 'lib/swift_required.php'; 
  
  if (isset($_GET['sku'])){
-	 require_once 'DAL/sheetboard_PDOConnection.php';
-	 $sheetboardOrder = new sheetboard();
-	 $product = $_GET['sku'];
+	 require_once 'DAL/PDOConnection.php';
+	 $sheetboardOrder = new products();
+	 $sku = $_GET['sku'];
+	 $sku = $sheetboardOrder->GetProducts($sku);
+	 foreach ($sku as $result)
+	 $sku_id = $result['sku_id'];
 	 //date_default_timezone_set('UTC');
 	$today = date('Y-m-d');
 				
-				$sheetboardOrder->sku_order($product, $today);
+				$sheetboardOrder->sku_order($sku_id, $today);
 	 
 	 }
   
@@ -44,7 +47,7 @@ require_once "DAL/settings.php";
  	echo "<div class='panel panel-success'>
 <div class='panel-heading' style='text-align:center;'><h3>Order Success!</h3></div>
 <div class='panel-body'>
-				Your order of ".$product . " has been successfully sent, have a nice day :-D"			
+				Your order of ".$result['sku'] . " has been successfully sent, have a nice day :-D"			
 	
 		
  ?>

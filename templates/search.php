@@ -59,17 +59,12 @@ if(isset($_POST['doSearch'])){
 			
 			else{
 			$productDal = new products;
-			$Search = $_POST['search_sku'];
-			$Search = $productDal->search($Search);
-			foreach($Search as $Result){
-			
-				$location_id = $Result['sku'];
-				$p_id = $Result['sku_id'];
-			
+			$fetch = $_POST['search_sku'];
+			$fetch = $productDal->Search($fetch);
 					}
-				}
-		}
-			elseif($_POST['doSearch']==2){
+				
+		
+			if ($_POST['doSearch']==2){
 			$productDal = new products;			
 			$Search = $_POST['search_location'];	
 			$Search = $productDal->SearchLocation($Search);
@@ -81,7 +76,7 @@ if(isset($_POST['doSearch'])){
  <div class="panel panel-primary" style="width:100%; float:left">
  <div class="panel panel-heading"><h3>Search Results</h3></div>
  <div class="panel-body" style="margin-top:-20px">
- <?php foreach ($Search as $result){ 
+ <?php foreach ($fetch as $result){ 
 	  echo "<div style='border-bottom: 1px dashed #777; padding-bottom:5px; margin-bottom:10px; width:100%; float:left'> "
 	  ?>
       
@@ -92,7 +87,7 @@ if(isset($_POST['doSearch'])){
       </div>
       
       <p>Product: <a href="?action=update_product&sku=<?php echo $result['sku']; ?>&sku_id=<?php echo $result['sku_id']; ?>"><?php echo
-	  $result['sku'];?></a>
+	  $result['sku']. '&nbsp' . $result['sku_id'];?></a>
 	  
 	  <?php 
 				//PRODUCT EDIT AND LOCATION ASSIGN				
@@ -125,10 +120,10 @@ if(isset($_POST['doSearch'])){
 				}
 				
 				if (!$result['location_name']){
-					echo "<a href='?action=delete&delete_product=".$result['sku']."'>Delete Product</a>";
+					echo "<a href='?action=action&delete_sku=".$result['sku']."'>Delete Product</a>";
 				}
 				else				
-						echo '<a href="?action=delete&delete='.$result['location_id'].'">Delete</a>';
+						echo '<a href="?action=action&clear_location&location_id='.$result['location_id'].'">Delete</a>';
 				?>
                 | <a href="?action=test_send&sku=<?php echo $result['sku'];?>&location_id=<?php echo $result['location_id'];?>">Order</a>
 				<?php if ($result['sku']>0){
@@ -139,6 +134,7 @@ if(isset($_POST['doSearch'])){
 						echo '</div>';
 						}
 					}
+		}
 }
 ?>
 

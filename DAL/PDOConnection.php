@@ -18,23 +18,23 @@ class Database
 
 class products{	
 	
-	public function search($Search){
+	public function Search($fetch){
 		$pdo = Database::DB();
 		$stmt = $pdo->prepare('
 			Select *
 			from products
-			left join location 
+			left outer join location 
 			on products.sku_id=location.sku_id
 			where sku like :stmt
 		');
-		$stmt->bindValue(':stmt', "%".$Search."%");
+		$stmt->bindValue(':stmt', "%".$fetch."%");
 		$stmt->execute();
 		if($stmt->rowCount()>0) {
 		return $stmt->fetchAll(PDO::FETCH_ASSOC);
 		}
 		else{
-			die("<div class='alert alert-danger' role='alert'>The Product '".$Search."' Could not be found. please click
-			<a href='?action=update&search=".$Search."'>here</a> to add it to the database!</div></div></ br></br>");
+			die("<div class='alert alert-danger' role='alert'>The Product '".$fetch."' Could not be found. please click
+			<a href='?action=update&search=".$fetch."'>here</a> to add it to the database!</div></div></ br></br>");
 			}
 	}
 	
@@ -98,10 +98,10 @@ class products{
 			}
 		}
 		
-		public function UpdateProduct($sku_id, $sku, $notes, $buffer_qty, $allocation_id, $supplier_id, $description){
+		public function UpdateProduct($sku_id, $sku, $notes, $buffer_qty, $allocation_id, $supplier_id, $description, $alias_1, $alias_2, $alias_3){
 		$pdo = Database::DB();
 		$stmt = $pdo->prepare('update products
-		set sku = :sku, notes = :notes, buffer_qty = :buffer_qty, allocation_id = :allocation_id, supplier_id = :supplier_id, description = :description
+		set sku = :sku, notes = :notes, buffer_qty = :buffer_qty, allocation_id = :allocation_id, supplier_id = :supplier_id, description = :description, alias_1 = :alias_1, alias_2 = :alias_2, alias_3 = :alias_3
 		where sku_id = :sku_id');		
 		$stmt->bindValue(':sku', $sku);
 		$stmt->bindValue(':notes', $notes);
@@ -109,6 +109,9 @@ class products{
 		$stmt->bindValue(':allocation_id', $allocation_id);
 		$stmt->bindValue(':supplier_id', $supplier_id);
 		$stmt->bindValue(':description', $description);
+		$stmt->bindValue(':alias_1', $alias_1);
+		$stmt->bindValue(':alias_2', $alias_2);
+		$stmt->bindValue(':alias_3', $alias_3);
 		$stmt->bindValue(':sku_id', $sku_id);
 		$stmt->execute();
 		
@@ -164,7 +167,41 @@ class products{
 		else{die ("<div> <style='line-height: 4.0em; align='center'>
             	<font style='color:red; font-size:20px'> '". $Search ."'</font> could not be found! Please try again.</strong></div></ br></br>");}
 	}
-}		
+	
+}	
+
+		public function Delete_Sku($sku){
+			$pdo = Database::DB();
+			$stmt = $pdo->prepare('delete  
+			from products
+			where
+			sku like :stmt');
+			$stmt->bindValue(':stmt', $sku);
+			$stmt->execute();
+		}
+		
+		public function Clear_Location($location_id){
+			$pdo = Database::DB();
+			$stmt = $pdo->prepare('update location
+			set sku_id = "0"
+			where
+			location_id like :stmt');
+			$stmt->bindValue(':stmt', $location_id);
+			$stmt->execute();
+		}
+		
+		public function sku_order($sku_id, $today){
+		$pdo = Database::DB();
+		$stmt = $pdo->prepare('insert into
+		order_history (sku_id, date)
+		values(?,?)
+		
+		');
+		$stmt->bindValue(1, $sku_id);
+		$stmt->bindValue(2, $today);
+		$stmt->execute();
+		}
+			
 	
 	//--------------------------------------------------------------------------------------------------------------------------------------------------//
 	

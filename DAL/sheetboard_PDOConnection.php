@@ -119,18 +119,6 @@ public function sku(){
 		$stmt->bindValue(3, $date);
 		$stmt->execute();
 		}
-		
-		public function sku_order($sku, $today){
-		$pdo = SBDatabase::DB();
-		$stmt = $pdo->prepare('insert into
-		sheetboard_movement (sku, order_date)
-		values(?,?)
-		
-		');
-		$stmt->bindValue(1, $sku);
-		$stmt->bindValue(2, $today);
-		$stmt->execute();
-		}
 
 
 public function total($sku){

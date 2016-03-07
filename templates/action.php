@@ -12,11 +12,14 @@ if(isset($_POST['updates'])){
 	$sku = $_POST['sku'];
     $notes = nl2br($_POST['notes']);
 	$buffer_qty = $_POST['buffer_qty'];
-	$allocation = $_POST['allocation'];
+	$allocation_id = $_POST['allocation_id'];
 	$supplier_id = $_POST['supplier_id'];
 	$description = nl2br($_POST['description']);
+	$alias_1 = $_POST['alias_1'];
+	$alias_2 = $_POST['alias_2'];
+	$alias_3 = $_POST['alias_3'];
 	
-	$productDal->UpdateProduct($sku_id, $sku,$notes,$buffer_qty, $allocation, $supplier_id ,$description);
+	$productDal->UpdateProduct($sku_id, $sku,$notes,$buffer_qty, $allocation_id, $supplier_id ,$description, $alias_1, $alias_2, $alias_3);
 	header("location:?action=update_product&sku=".$sku."&sku_id=".$sku_id);
 }
 
@@ -29,13 +32,16 @@ if(isset($_POST['add_location'])){
 		echo '<div class="alert alert-success" role="alert">Product Successfully updated to Location</div>';	
 }
 
-if(isset($_GET['delete'])){
-    $productDal->Delete($_GET['delete']);
+if(isset($_GET['clear_location'])){
+	$location_id = $_GET['location_id'];
+    $productDal->Clear_Location($location_id);
     header("Status: 200");
-    header("Location: ?action=search");
+   header("Location: ?action=search");
 }
-if (isset($_GET['delete_product'])){
-	$productDal->ProductDelete($_GET['delete_product']);
+
+if (isset($_GET['delete_sku'])){	
+	$sku = $_GET['delete_sku'];
+	$productDal->Delete_Sku($sku);
 	header("Status: 200");
 	header("Location: ?action=search");
 	}
