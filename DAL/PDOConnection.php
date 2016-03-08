@@ -23,8 +23,8 @@ class products{
 		$stmt = $pdo->prepare('
 			Select *
 			from products
-			left outer join location 
-			on products.sku_id=location.sku_id
+			left join location 
+			on location.sku_id=products.sku_id
 			where sku like :stmt
 		');
 		$stmt->bindValue(':stmt', "%".$fetch."%");

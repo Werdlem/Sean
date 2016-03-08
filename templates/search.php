@@ -87,7 +87,7 @@ if(isset($_POST['doSearch'])){
       </div>
       
       <p>Product: <a href="?action=update_product&sku=<?php echo $result['sku']; ?>&sku_id=<?php echo $result['sku_id']; ?>"><?php echo
-	  $result['sku']. '&nbsp' . $result['sku_id'];?></a>
+	  $result['sku'];?></a>
 	  
 	  <?php 
 				//PRODUCT EDIT AND LOCATION ASSIGN				
