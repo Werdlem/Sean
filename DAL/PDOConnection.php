@@ -42,6 +42,7 @@ class products{
 		$pdo = Database::DB();
 		$stmt = $pdo->prepare('Select *
 			from products
+			right join stock_allocation on products.allocation_id=stock_allocation.allocation_id
 			where sku = :stmt');
 		$stmt->bindValue(':stmt', $sku);
 		$stmt->execute();				
@@ -261,8 +262,231 @@ class products{
 			return $results;
 		}
 	}
-			
 	
+	public function GetProductsLocation($location_id){
+		$pdo = Database::DB();
+		$stmt = $pdo->prepare('select *
+		from location
+		left join products on location.sku_id=products.sku_id
+		where location_id = :stmt');
+		$stmt->bindValue(':stmt', $location_id);
+		$stmt->execute();				
+		while($row = $stmt->fetchAll(PDO::FETCH_ASSOC))
+		{
+			return $row;
+		}
+	}
+	
+	public function Update_Location($sku_id, $result){
+		$pdo = Database::DB();
+		$stmt = $pdo->prepare('update
+		location
+		set sku_id = :stmt
+		where
+		location_id = :id');
+		$stmt->bindValue(':stmt', $sku_id);
+		$stmt->bindValue(':id', $result);
+		$stmt->execute();
+		echo '<div class="alert alert-success" role="alert">Product Successfully updated to Location</div>';
+	}
+	
+	public function goods_in_sku(){
+	$pdo = Database::DB();
+	$stmt = $pdo->query('select *
+	from goods_in
+	group by sku');
+	$stmt->execute();
+	if ($stmt->rowCount()> 'null'){
+		while ($results = $stmt->fetchAll(PDO::FETCH_ASSOC))
+		{
+			return $results;
+			}
+		}
+	}
+	
+	public function get_Sheetboard($sku){
+		$pdo = Database::DB();
+		$stmt = $pdo->prepare('
+			Select *
+			from goods_in
+			where sku like :stmt
+			having qty_received <> "0.00"
+			order by delivery_date desc
+			limit 10
+			
+		');
+		$stmt->bindValue(':stmt', $sku);
+		$stmt->execute();
+		if($stmt->rowCount()>0) {
+		return $stmt->fetchAll(PDO::FETCH_ASSOC);
+		}
+		else{
+			die();
+			}
+	}
+	
+	public function get_sku(){
+	$pdo = Database::DB();
+	$stmt = $pdo->prepare('select sku, MAX(order_date)
+	from stock_adjustment
+	group by sku	
+	');
+	$stmt->execute();
+	if($stmt->rowCount()>0) {
+		return $stmt->fetchAll(PDO::FETCH_ASSOC);
+		}
+		
+	}
+	
+	public function Goods_In_Total($sku){
+		$pdo = Database::DB();
+		$stmt = $pdo->prepare('select 
+		coalesce(sum(qty_received),0) as total
+		from goods_in
+		group by sku
+		having sku = ?
+		');
+		$stmt->bindValue(1, $sku);
+		$stmt->execute();
+		
+		$results = $stmt->fetch(PDO::FETCH_ASSOC);
+		{
+			return $results;		
+		}
+		
+		
+	}
+	
+	public function get_Movement($sku){
+	$pdo = Database::DB();
+		$stmt = $pdo->prepare('
+			Select *
+			from stock_adjustment 
+			where stock_adjustment.sku like (?)
+			having date <> "0000-00-00"
+			order by date DESC
+			limit 10
+			
+		');
+		$stmt->bindValue(1, $sku);		
+		$stmt->execute();
+		if($stmt->rowCount()>0) {
+		return $stmt->fetchAll(PDO::FETCH_ASSOC);
+		}
+		else{
+			
+			}
+	}
+	
+	public function total($sku){
+		$pdo = Database::DB();
+		$stmt = $pdo->prepare('select 
+		coalesce(sum(qty_out),0) - coalesce(sum(qty_in),0) as total
+		from stock_adjustment		
+		where
+		stock_adjustment.sku like (?)
+		
+		');
+		$stmt->bindValue(1, $sku);
+		$stmt->execute();
+		if ($stmt->rowCount()>0){
+			
+				$results = $stmt->fetch(PDO::FETCH_ASSOC);{
+				return $results;
+		
+				}
+		}
+	}
+	
+	public function qty_In($sku, $qty_in, $date){
+		$pdo = Database::DB();
+		$stmt = $pdo->prepare('insert into
+		stock_adjustment (sku, qty_in, date)
+		values (?,?,?)		
+		');
+		$stmt->bindValue(1, $sku);
+		$stmt->bindValue(2, $qty_in);
+		$stmt->bindValue(3, $date);
+		$stmt->execute();
+		}
+		
+		public function qty_Out($sku,$qty_out, $date){
+		$pdo = Database::DB();
+		$stmt = $pdo->prepare('insert into
+		stock_adjustment (sku, qty_out, date)
+		values(?,?,?)
+		
+		');
+		$stmt->bindValue(1, $sku);
+		$stmt->bindValue(2, $qty_out);
+		$stmt->bindValue(3, $date);
+		$stmt->execute();
+		}
+		
+		public function goods_in_last_total($total){
+		$pdo = Database::DB();
+		$stmt = $pdo->prepare('select * from 
+		(select * from goods_in 
+		where sku like (?) 
+		order by delivery_date desc) 
+		as goods_in 
+		group by sku
+		');
+		$stmt->bindValue(1, $total);
+		$stmt->execute();	
+		if($stmt->rowCount()>0) {
+		return $stmt->fetchAll(PDO::FETCH_ASSOC);
+		}
+		else{
+			die();
+			}
+	}
+	
+	public function Stock_Adjustment_Total($total){
+		$pdo = Database::DB();
+		$stmt = $pdo->prepare('select 
+		coalesce(sum(stock_adjustment.qty_out),0) - coalesce(sum(stock_adjustment.qty_in),0) as total
+		from stock_adjustment
+		group by stock_adjustment.sku 
+		having sku = ?
+		');
+		$stmt->bindValue(1, $total);
+		$stmt->execute();		
+		$results = $stmt->fetch(PDO::FETCH_ASSOC);
+		{
+			return $results;		
+		}
+		
+	}
+	
+	public function delete_line($id){
+	$pdo = Database::DB();
+	$stmt = $pdo->prepare('delete 
+	from stock_adjustment
+	where id like (?)'
+	);	
+	$stmt->bindValue(1, $id);
+			$stmt->execute();
+	}
+	
+	public function Get_Allocation(){
+		$pdo = Database::DB();
+		$stmt = $pdo->prepare('
+			Select *
+			from stock_allocation			
+		');
+		$stmt->execute();
+		if($stmt->rowCount()>0) {
+		return $stmt->fetchAll(PDO::FETCH_ASSOC);
+		}
+		else{
+			die();
+			}
+	}
+	
+	
+
+
 	//--------------------------------------------------------------------------------------------------------------------------------------------------//
 	
 	
@@ -300,18 +524,7 @@ class products{
 		}
 	}
 	
-	public function update_location($location_id, $location){
-		$pdo = Database::DB();
-		$stmt = $pdo->prepare('update
-		location
-		set location = :stmt
-		where
-		id = :id');
-		$stmt->bindValue(':stmt', $location);
-		$stmt->bindValue(':id', $location_id);
-		$stmt->execute();
-		echo '<div class="alert alert-success" role="alert">Product Successfully updated to Location</div>';		
-		}
+	
 		
 	public function GetAisleSort($Aisle){
 		$pdo = Database::DB();
@@ -329,19 +542,7 @@ class products{
 		}
 	}
 	
-	public function GetProductsLocation($id){
-		$pdo = Database::DB();
-		$stmt = $pdo->prepare('select *
-		from location
-		left join products on location.product_id=products.product_id
-		where id = :stmt');
-		$stmt->bindValue(':stmt', $id);
-		$stmt->execute();				
-		while($row = $stmt->fetchAll(PDO::FETCH_ASSOC))
-		{
-			return $row;
-		}
-	}
+	
 		
 		public function InsertProduct($id, $product, $notes, $quantity, $description){
 		$pdo = Database::DB();

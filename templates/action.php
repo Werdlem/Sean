@@ -32,11 +32,10 @@ if(isset($_POST['add_location'])){
 		echo '<div class="alert alert-success" role="alert">Product Successfully updated to Location</div>';	
 }
 
-if(isset($_GET['clear_location'])){
+if(isset($_GET['clear_location'])){	
 	$location_id = $_GET['location_id'];
-    $productDal->Clear_Location($location_id);
-    header("Status: 200");
-   header("Location: ?action=search");
+   $productDal->Clear_Location($location_id);
+   header("Location: ".$_SERVER['HTTP_REFERER']);
 }
 
 if (isset($_GET['delete_sku'])){	
@@ -73,6 +72,46 @@ $last_ordered = $_POST['last_ordered'];
 $productDal->Add_Sku($sku, $pack_qty, $alias_1, $alias_2, $alias_3, $allocation_id, $description, $stock_qty, $buffer_qty, $notes);
 header('location: ?action=update_product&sku='.$sku.'&sku_id=');
 }
+
+if(isset($_POST['update_location'])){
+   $result = $_POST['location_id'];
+		$sku_id = $_POST['sku_id'];
+		echo $sku_id;
+       $productDal->Update_Location($sku_id, $result);
+		header("location: ?action=search");	
+}
+
+if (isset($_GET['update_sheetboard'])) {
+		$sku = $_GET['sku'];
+		
+		if ($_POST['add'] > 0){
+	$add = $_POST['add'];
+	$date = date('y-m-d');
+	
+	$qty_in = $_POST['add'];
+	$add = $productDal->qty_In($sku, $qty_in, $date);
+	}
+	else{
+		if($_POST['subtract']> 0){
+		$subtract = $_POST['subtract'];
+	$date = date('y-m-d');
+
+	$qty_out = $_POST['subtract'];
+	$subtract = $productDal->qty_Out($sku, $qty_out, $date);
+		}
+	
+	}
+	$dosearch = '1';
+	header('Location: ?action=sheetboard_details&sku=' .$sku);
+	}
+	
+		if (isset($_GET['delete_line'])){
+			$id = $_GET['id'];
+			$sku = $_GET['sku'];
+			
+			$delete_line = $productDal->delete_line($id);
+			header('location:? action=sheetboard_details&sku='.$sku);
+			}
 
 
 
@@ -137,37 +176,9 @@ header("Location: ?action=add_production_stock");
 		 }
 		 
 		 
-	if (isset($_GET['update_sheetboard'])) {
-		$sku = $_GET['sku'];
-		
-		if ($_POST['add'] > 0){
-	$add = $_POST['add'];
-	$date = date('y-m-d');
 	
-	$qty_in = $_POST['add'];
-	$add = $sheetboardDAL->qty_In($sku, $qty_in, $date);
-	}
-	else{
-		if($_POST['subtract']> 0){
-		$subtract = $_POST['subtract'];
-	$date = date('y-m-d');
-
-	$qty_out = $_POST['subtract'];
-	$subtract = $sheetboardDAL->qty_Out($sku, $qty_out, $date);
-		}
-	
-	}
-	$dosearch = '1';
-	header('Location: ?action=sheetboard_details&sku=' .$sku);
-	}
 		
-		if (isset($_GET['delete_line'])){
-			$id = $_GET['id'];
-			$sku = $_GET['sku'];
-			
-			$delete_line = $sheetboardDAL->delete_line($id);
-			header('location:? action=sheetboard_detials&sku='.$sku);
-			}
+	
 		
 		//header('Location: ?action=sheetboard_details&sku=' .$sku);
 	

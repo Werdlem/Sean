@@ -56,7 +56,21 @@ $sku = $productDal->GetProducts($sku);
       </div>
       <div style="width:50%; float: left;">
         <label for="allocation_id">Allocation</label>
-        <input id="allocation_id" name="allocation_id" type="text" class="form-control" value="<?php echo $productDetail['allocation_id']; ?>"/>
+        <?php $product = $productDal->Get_Allocation();
+	  $dropdown = "<select style='width:95%' name='allocation_id' id='allocation_id' onchange='select()'>";
+	  			$dropdown.="\r\n<option value='{$productDetail['allocation_id']}'>{$productDetail['name']}</option>";
+	  foreach ($product as $result){
+		  $dropdown .="\r\n<option value='{$result['allocation_id']}'>{$result['name']}</option>";
+		  }
+		  $dropdown .="\r\n</select>";
+		  echo $dropdown;
+	   ?>
+        <script>
+       function select(){
+		   var x = document.getElementById("allocation_id").value;
+		   
+		   }
+       </script> 
       </div>
       <div style="width:50%; margin-left:200px">
         <label for="supplier_id">Supplier</label>

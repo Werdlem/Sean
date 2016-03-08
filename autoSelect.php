@@ -9,13 +9,13 @@ if(isset($_GET['term'])){
 		$pdo = Database::DB();
 		$stmt = $pdo->prepare('select *
 		from products
-		where product
+		where sku
 		like :term');
 		$stmt->execute(array('term' => '%'.$_GET['term'].'%'));
 		foreach ($stmt as $result)
 		{
-			$result['value'] = $result['product'];
-			$result['label'] = "{$result['product']}";
+			$result['value'] = $result['sku'];
+			$result['label'] = "{$result['sku']}";
 			$matches[] = $result;
 			}
 }

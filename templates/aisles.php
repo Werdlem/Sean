@@ -20,7 +20,10 @@ $productDal = new products;
 </div></div>
 
 <?php
-  $aisle = $_GET['aisle']; ?>
+
+  $aisle = $_GET['aisle']; 
+
+?>
   
 <div class="panel panel-info" style="width:60%; float:left">
   <!-- Default panel contents -->
@@ -40,6 +43,7 @@ $productDal = new products;
         </thead>
         <tbody>
         <?php
+				 		 
 	$aisles = $productDal->GetAisle($aisle);	
     foreach ($aisles as $result)
     {
@@ -54,12 +58,12 @@ $productDal = new products;
             </td>
             
             <td>
-                <a href="?action=delete&delete=<?php echo $result['sku']; ?>">Delete</a>
+                <a href="?action=action&clear_location&location_id=<?php echo $result['location_id'] ?>">Delete <?php echo $result['location_id'] ?></a>
             </td>
             
             <?php } else{
 				echo
-				"<td><a href='?action=add_product&id=". $result['sku']."'>Insert</a></td>
+				"<td><a href='?action=update_location&location_id=". $result['location_id']."'>Insert</a></td>
 				";
 				}?>
             
