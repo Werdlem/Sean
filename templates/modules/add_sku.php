@@ -53,8 +53,8 @@ else
             <input id="stock_qty" class="form-control" name="stock_qty" type="text" value="0"/>
              </div>
              <div>
-            <label for="quantity">Buffer Quantity</label>
-            <input id="buffer_quantity" class="form-control" name="buffer_quantity" type="text" value="0"/>
+            <label for="buffer_qty">Buffer Quantity</label>
+            <input id="buffer_qty" class="form-control" name="buffer_qty" type="text" value="0"/>
              </div>
              <div>
              <div>          
