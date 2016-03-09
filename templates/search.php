@@ -51,9 +51,7 @@ if(isset($_POST['doSearch'])){
 	
 	if($_POST['doSearch']==1)
 		{
-			if ($_POST['search_sku'] == ""){ 
-			
-			
+			if ($_POST['search_sku'] == ""){ 			
 			die ('<div class="alert alert-danger" role="alert" style="float:left; width:100%; text-align: center">Oops, it would appear you have not entered a product to search for!! <br />Please try again!</div>');
 			}
 			
@@ -62,14 +60,12 @@ if(isset($_POST['doSearch'])){
 			$fetch = $_POST['search_sku'];
 			$fetch = $productDal->Search($fetch);
 					}
-				
-		
-			if ($_POST['doSearch']==2){
+		}	
+			if ($_POST['doSearch']==2){					
 			$productDal = new products;			
-			$Search = $_POST['search_location'];	
-			$Search = $productDal->SearchLocation($Search);
-}
-
+			$fetch = $_POST['search_location'];	
+			$fetch = $productDal->SearchLocation($fetch);
+			}
 
  if (!isset($_POST['doSearch']) || $_POST['doSearch']) { 
  ?>
@@ -135,6 +131,5 @@ if(isset($_POST['doSearch'])){
 						}
 					}
 		}
-}
 ?>
 

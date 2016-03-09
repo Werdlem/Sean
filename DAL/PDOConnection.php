@@ -42,7 +42,7 @@ class products{
 		$pdo = Database::DB();
 		$stmt = $pdo->prepare('Select *
 			from products
-			right join stock_allocation on products.allocation_id=stock_allocation.allocation_id
+			left join stock_allocation on products.allocation_id=stock_allocation.allocation_id
 			where sku = :stmt');
 		$stmt->bindValue(':stmt', $sku);
 		$stmt->execute();				
@@ -166,10 +166,11 @@ class products{
 		}
 		}
 		else{die ("<div> <style='line-height: 4.0em; align='center'>
-            	<font style='color:red; font-size:20px'> '". $Search ."'</font> could not be found! Please try again.</strong></div></ br></br>");}
-	}
-	
-}	
+            	<font style='color:red; font-size:20px'> '". $Search ."'</font> could not be found! Please try again.</strong></div></ br></br>");
+				}
+			}
+			
+		}	
 
 		public function Delete_Sku($sku){
 			$pdo = Database::DB();

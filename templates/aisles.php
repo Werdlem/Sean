@@ -58,13 +58,12 @@ $productDal = new products;
             </td>
             
             <td>
-                <a href="?action=action&clear_location&location_id=<?php echo $result['location_id'] ?>">Delete <?php echo $result['location_id'] ?></a>
+                <a href="?action=action&clear_location&location_id=<?php echo $result['location_id'] ?>">Delete</a>
             </td>
             
             <?php } else{
 				echo
-				"<td><a href='?action=update_location&location_id=". $result['location_id']."'>Insert</a></td>
-				";
+				"<td><a href='?action=update_location&location_id=". $result['location_id']."'>Update</a></td>";
 				}?>
             
         </tr>
