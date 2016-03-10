@@ -99,10 +99,10 @@ class products{
 			}
 		}
 		
-		public function UpdateProduct($sku_id, $sku, $notes, $buffer_qty, $allocation_id, $supplier_id, $description, $alias_1, $alias_2, $alias_3){
+		public function UpdateProduct($sku_id, $sku, $notes, $buffer_qty, $allocation_id, $supplier_id, $description, $alias_1, $alias_2, $alias_3, $stock_qty){
 		$pdo = Database::DB();
 		$stmt = $pdo->prepare('update products
-		set sku = :sku, notes = :notes, buffer_qty = :buffer_qty, allocation_id = :allocation_id, supplier_id = :supplier_id, description = :description, alias_1 = :alias_1, alias_2 = :alias_2, alias_3 = :alias_3
+		set sku = :sku, notes = :notes, buffer_qty = :buffer_qty, allocation_id = :allocation_id, supplier_id = :supplier_id, description = :description, alias_1 = :alias_1, alias_2 = :alias_2, alias_3 = :alias_3, stock_qty = :stock_qty
 		where sku_id = :sku_id');		
 		$stmt->bindValue(':sku', $sku);
 		$stmt->bindValue(':notes', $notes);
@@ -113,6 +113,7 @@ class products{
 		$stmt->bindValue(':alias_1', $alias_1);
 		$stmt->bindValue(':alias_2', $alias_2);
 		$stmt->bindValue(':alias_3', $alias_3);
+		$stmt->bindValue(':stock_qty', $stock_qty);
 		$stmt->bindValue(':sku_id', $sku_id);
 		$stmt->execute();
 		
@@ -295,7 +296,8 @@ class products{
 	$pdo = Database::DB();
 	$stmt = $pdo->query('select *
 	from goods_in
-	group by sku');
+	left join products on goods_in.sku=products.sku
+	group by goods_in.sku');
 	$stmt->execute();
 	if ($stmt->rowCount()> 'null'){
 		while ($results = $stmt->fetchAll(PDO::FETCH_ASSOC))

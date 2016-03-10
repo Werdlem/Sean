@@ -51,8 +51,8 @@ $sku = $productDal->GetProducts($sku);
         <input id="buffer_qty" name="buffer_qty" type="text" class="form-control"  value="<?php echo $productDetail['buffer_qty']; ?>"/>
       </div>
       <div style="width:50%; margin-left:200px">
-        <label for="quantity">Total Stock</label>
-        <input id="quantity" name="quantity" type="text" class="form-control" value="<?php echo $productDetail['stock_qty'];?>" />
+        <label for="stock_qty">Total Stock</label>
+        <input id="stock_qty" name="stock_qty" type="text" class="form-control" value="<?php echo $productDetail['stock_qty'];?>" />
       </div>
       <div style="width:50%; float: left;">
         <label for="allocation_id">Allocation</label>

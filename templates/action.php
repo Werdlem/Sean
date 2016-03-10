@@ -18,6 +18,7 @@ if(isset($_POST['updates'])){
 	$alias_1 = $_POST['alias_1'];
 	$alias_2 = $_POST['alias_2'];
 	$alias_3 = $_POST['alias_3'];
+	$stock_qty = $_POST['stock_qty'];
 	
 	$productDal->UpdateProduct($sku_id, $sku,$notes,$buffer_qty, $allocation_id, $supplier_id,$description, $alias_1, $alias_2, $alias_3, $stock_qty);
 	header("location:?action=update_product&sku=".$sku."&sku_id=".$sku_id);
@@ -89,7 +90,7 @@ if (isset($_GET['update_sheetboard'])) {
 	$date = date('y-m-d');
 	
 	$qty_in = $_POST['add'];
-	$add = $productDal->qty_In($sku, $qty_in, $date);
+	$add = $productDal->qty_In($sku, $qty_in, $date, $allocation_id);
 	}
 	else{
 		if($_POST['subtract']> 0){
