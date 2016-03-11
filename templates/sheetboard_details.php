@@ -4,15 +4,10 @@ $productDal = new products();
 
 include('/templates/sheetboard.php');
 
-if (isset($_GET['sku'])){
-	
+if (isset($_GET['sku'])){	
 	$sku = $_GET['sku'];
 	}
-	else{
-	$sku = $_POST['search_board'];	
-	}
-				
-		$goods_in = $productDal->get_Sheetboard($sku);
+	
 		$stock = $productDal->get_sku($sku);
 
 	?>
@@ -46,7 +41,7 @@ if (isset($_GET['sku'])){
       </form>
     </div>
     <?php 
-include ('/templates/modules/goods_in.php');
+//include ('/templates/modules/goods_in.php');
 include ('/templates/modules/goods_out.php');
 
 $total = $goods_in_amt - $goods_out_amt;

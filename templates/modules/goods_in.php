@@ -1,4 +1,6 @@
-<?php $total = $productDal->goods_In_total($sku); ?>
+<?php 
+$goods_in = $productDal->get_Sheetboard($sku);
+$total = $productDal->goods_In_total($sku); ?>
 
 <table class="table" style="width:48%; float:left;">
   
