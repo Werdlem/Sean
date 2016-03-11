@@ -294,9 +294,9 @@ class products{
 	
 	public function goods_in_sku(){
 	$pdo = Database::DB();
-	$stmt = $pdo->query('select *
+	$stmt = $pdo->query('select goods_in.sku, products.sku_id
 	from goods_in
-	left join products on goods_in.sku=products.sku
+	left outer join products on goods_in.sku=products.sku
 	group by goods_in.sku');
 	$stmt->execute();
 	if ($stmt->rowCount()> 'null'){
@@ -330,9 +330,10 @@ class products{
 	
 	public function get_sku(){
 	$pdo = Database::DB();
-	$stmt = $pdo->prepare('select sku, MAX(order_date)
+	$stmt = $pdo->prepare('select stock_adjustment.sku, MAX(order_date)
 	from stock_adjustment
-	group by sku	
+	left join products on stock_adjustment.sku=products.sku
+	group by stock_adjustment.sku	
 	');
 	$stmt->execute();
 	if($stmt->rowCount()>0) {
@@ -429,11 +430,11 @@ class products{
 		public function goods_in_last_total($total){
 		$pdo = Database::DB();
 		$stmt = $pdo->prepare('select * from 
-		(select * from goods_in 
-		where sku like (?) 
-		order by delivery_date desc) 
-		as goods_in 
-		group by sku
+		products
+		left join goods_in on goods_in.sku=products.sku
+		where products.sku like (?) 
+		group by goods_in.sku
+	
 		');
 		$stmt->bindValue(1, $total);
 		$stmt->execute();	
@@ -487,7 +488,53 @@ class products{
 			}
 	}
 	
+	public function Get_Allocation_Sku ($fetch){
+		$pdo = Database::DB();
+		$stmt = $pdo->prepare('select *
+		from products
+		where allocation_id=(?)');
+		$stmt->bindValue(1 ,$fetch);
+	$stmt->execute();
+	if ($stmt->rowCount()> 'null'){
+		while ($results = $stmt->fetchAll(PDO::FETCH_ASSOC))
+		{
+			return $results;
+			}
+		}
+	}
 	
+	public function qty_instock($selection){
+			$pdo = Database::DB();
+			$stmt = $pdo->prepare('select
+				sum(qty_received) - (select sum(qty_delivered) 
+				from goods_out
+ 				where sku like (?)) as total
+				from goods_in 
+				where sku like (?)');
+				$stmt->bindValue(1, '%'.$selection.'%');
+				$stmt->bindValue(2, '%'.$selection.'%');
+				$stmt->execute();
+				while($row = $stmt->fetchALL(PDO::FETCH_ASSOC))
+		{
+			return $row;
+		}
+			}
+			
+			public function Qty_In_Stock($stk){
+			$pdo = Database::DB();
+			$stmt = $pdo->prepare('select 
+		sum(qty_in) - sum(qty_out) as amount
+		from stock_adjustment
+		where sku = ?');
+				$stmt->bindValue(1, $stk);				
+				$stmt->execute();
+		$results = $stmt->fetch(PDO::FETCH_ASSOC);
+		{
+			return $results;		
+		}
+		
+		
+			}
 
 
 	//--------------------------------------------------------------------------------------------------------------------------------------------------//

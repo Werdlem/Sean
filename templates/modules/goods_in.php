@@ -8,7 +8,15 @@
     <td style="text-align:center">Qty</td>
   </tr>
   <tr>
-    <?php if ($total){foreach ($total as $goods_in_amt){ $goods_in_amt;}} else {echo '0';} ?>
+    <?php if (!$total){
+		echo 'No data found';
+		}
+	else
+	{
+		foreach ($total as $goods_in_amt){ $goods_in_amt;
+		}
+			} 
+		?>
     <?php
 	 		foreach ($goods_in as $Result){?>
     <td><?php echo $Result['delivery_date']?></td>

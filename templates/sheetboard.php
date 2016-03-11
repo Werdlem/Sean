@@ -27,7 +27,7 @@ $productDal = new products();
         <?php $product = $productDal->goods_in_sku();
 	  $dropdown = "<select name='search_board' id='mySelect' onchange='select()'>";
 	  foreach ($product as $result){
-		  $dropdown .="\r\n<option value='{$result['sku']}'>{$result['sku']} {$result['allocation_id']}</option>";
+		  $dropdown .="\r\n<option value='{$result['sku']}'>{$result['sku']}</option>";
 		  }
 		  $dropdown .="\r\n</select>";
 		  echo $dropdown;

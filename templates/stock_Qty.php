@@ -1,6 +1,6 @@
 <?php require_once './DAL/PDOConnection.php';
 $productDal = new products();
-$stock = $productDal->get_sku();
+$fetch = $productDal->Get_Allocation();
 ?>
 
 <div class="panel panel-primary" style="width:100%; float:left;">
@@ -8,6 +8,37 @@ $stock = $productDal->get_sku();
   <h3>Stock Quantity Totals</h3>
 </div>
 <div class="panel-body">
+<form  method="post" id="Search" action="?action=stock_qty">
+      <div id="search" style="text-align:center">
+        <?php $product = $productDal->Get_Allocation();
+	  $dropdown = "<select name='search_stock' id='mySelect' onchange='select()'>";
+	  foreach ($product as $result){
+		  $dropdown .="\r\n<option value='{$result['allocation_id']}'>{$result['name']}</option>";
+		  }
+		  $dropdown .="\r\n</select>";
+		  echo $dropdown;
+	   ?>
+        <script>
+       function select(){
+		   var x = document.getElementById("mySelect").value;
+		   
+		   }
+       </script> 
+        <br />
+        <br />
+        <button type="submit" class="btn btn-large btn-success" name="submit" >Search</button>
+        <input type="hidden" name="doSearch" value="1">
+      </div>
+    </form>
+    <?php 
+    if(isset($_POST['doSearch'])){
+	
+	if($_POST['doSearch']==1)
+		{
+			$fetch = $_POST['search_stock'];
+			
+			$fetch = $productDal->Get_Allocation_Sku($fetch);
+			?>
 <div>
 <table class="table">
   <tr class="heading">
@@ -18,36 +49,41 @@ $stock = $productDal->get_sku();
     <td style="font-size:16px; text-align:center"><strong>Order</td>
   </tr>
   <?php
+  
 
-foreach ($stock as $result){ ?>
+foreach ($fetch as $result){ ?>
   <tr>
-    <td style=""><a href="?action=sheetboard_details&sku=<?php echo $result['sku'];?>"><?php echo $result['sku'];?></a></td>
-    <td style="text-align:center"><?php if ($result['MAX(order_date)'] < '(NULL)') { echo '';} else{ echo date('d-m-Y',strtotime($result['MAX(order_date)']));} ?></td>
+    <td style=""><a href="?action=sheetboard_details&sku=<?php echo $result['sku'];?>"><?php echo $result['sku']; ?></a></td>
+    <td style="text-align:center"><?php if ($result['last_order_date'] < '(NULL)') { echo '';} else{ echo date('d-m-Y',strtotime($result['last_order_date']));} ?></td>
     <?php
 $total = $result['sku'];
 $sku = $result['sku'];
-	$last_qty = $productDal->goods_in_last_total($total);
-	$total = $productDal->Stock_Adjustment_Total($total);
-	$sku = $productDal->Goods_in_total($sku);
-	foreach ($last_qty as $last_qty_result){ $percentage  = (50 / 100) * $last_qty_result['qty_received'];
-	if ($total){foreach ($total as $amt);{ $amt;}}else{echo '0';} ;	
-	if ($sku){foreach ($sku as $goods_in_amt);{ $goods_in_amt;}}else{echo '0';}; 
+$stk = $result['sku'];
+$last_qty = $productDal->goods_in_last_total($total);
+$total = $productDal->Stock_Adjustment_Total($total);
+$sku = $productDal->Goods_in_total($sku);
+$qty_in = $productDal->Qty_In_Stock($stk);
+
+foreach ($last_qty as $last_qty_result){ $percentage  = (50 / 100) * $last_qty_result['qty_received'];
+	if ($total){foreach ($total as $amt);{ $amt;}}else{$amt = 0;} ;	
+	if ($sku){foreach ($sku as $goods_in_amt);{ $goods_in_amt;}}else{$goods_in_amt = 0;}; 
 	?>
-    <td style="text-align:center"><?php echo date('d-m-Y', strtotime($last_qty_result['delivery_date'])) ?></td>
+    <td style="text-align:center"><?php $date =  date('d-m-Y', strtotime($last_qty_result['delivery_date']));{ if (!$date){echo  '';} else{ echo $date ;} }?></td>
     <td style="text-align:center"><?php $Total_stock = $goods_in_amt - $amt;
 	
-	if ($Total_stock < $percentage)
-	{
-		echo '<strong style="color:red">' . $Total_stock;
-		}
-		else
 	
-	echo $Total_stock;
-	?></td>
+$amount = $goods_in_amt + ($qty_in['amount']);
+echo $amount;
+
+	?>
+	</td>
     <td style="text-align:center"><a href="?action=send&sku=<?php echo $result['sku'];?>" class="btn btn-large btn-primary">Order</a></td>
-    <?php
+    
+  <?php }
 }
-}
+		}
+	}
+ 
 ?>
   </tr>
 </table>

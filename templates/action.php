@@ -87,8 +87,7 @@ if (isset($_GET['update_sheetboard'])) {
 		
 		if ($_POST['add'] > 0){
 	$add = $_POST['add'];
-	$date = date('y-m-d');
-	
+	$date = date('y-m-d');	
 	$qty_in = $_POST['add'];
 	$add = $productDal->qty_In($sku, $qty_in, $date, $allocation_id);
 	}
