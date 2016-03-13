@@ -1,6 +1,8 @@
 <?php 
 $goods_in = $productDal->get_Sheetboard($sku);
-$total = $productDal->goods_In_total($sku); ?>
+$total = $productDal->goods_In_total($sku); 
+
+?>
 
 <table class="table" style="width:48%; float:left;">
   
@@ -10,14 +12,14 @@ $total = $productDal->goods_In_total($sku); ?>
     <td style="text-align:center">Qty</td>
   </tr>
   <tr>
-    <?php if (!$total){
-		echo 'No data found';
+    <?php 
+	if (!$total){
+		$goods_in_amt = 0;
 		}
-	else
-	{
-		foreach ($total as $goods_in_amt){ $goods_in_amt;
+		else{
+		foreach ($total as $goods_in_amt){ $goods_in_amt; //<----- total amount received stored as a variable for use on sheetboard_details
 		}
-			} 
+			
 		?>
     <?php
 	 		foreach ($goods_in as $Result){?>
@@ -26,5 +28,8 @@ $total = $productDal->goods_In_total($sku); ?>
   </tr>
   <?php 
 			}
+			}
+
+	
 	?>
 </table>

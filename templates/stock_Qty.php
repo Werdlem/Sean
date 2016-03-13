@@ -58,21 +58,20 @@ foreach ($fetch as $result){ ?>
     <?php
 $total = $result['sku'];
 $sku = $result['sku'];
-$stk = $result['sku'];
 $last_qty = $productDal->goods_in_last_total($total);
-$total = $productDal->Stock_Adjustment_Total($total);
-$sku = $productDal->Goods_in_total($sku);
-$qty_in = $productDal->Qty_In_Stock($stk);
+$adjustment_total = $productDal->Stock_Adjustment_Total($total);
+$sku_total = $productDal->Goods_in_total($total);
+$qty_in = $productDal->Qty_Instock($sku);
 
 foreach ($last_qty as $last_qty_result){ $percentage  = (50 / 100) * $last_qty_result['qty_received'];
-	if ($total){foreach ($total as $amt);{ $amt;}}else{$amt = 0;} ;	
-	if ($sku){foreach ($sku as $goods_in_amt);{ $goods_in_amt;}}else{$goods_in_amt = 0;}; 
+	if ($adjustment_total){foreach ($adjustment_total as $amt);{ $amt;}}else{$amt = 0;} ;	
+	if ($sku_total){foreach ($sku_total as $goods_in_amt);{ $goods_in_amt;}}else{$goods_in_amt = 0;}; 
 	?>
     <td style="text-align:center"><?php $date =  date('d-m-Y', strtotime($last_qty_result['delivery_date']));{ if (!$date){echo  '';} else{ echo $date ;} }?></td>
-    <td style="text-align:center"><?php $Total_stock = $goods_in_amt - $amt;
+    <td style="text-align:center; */"><?php $Total_stock = $goods_in_amt - $amt;
 	
 	
-$amount = $goods_in_amt + ($qty_in['amount']);
+$amount = $goods_in_amt + ($qty_in['total']);
 echo $amount;
 
 	?>

@@ -40,7 +40,7 @@ $productDal = new products();
        </script> 
         <br />
         <br />
-        <button type="submit" class="btn btn-large btn-success" name="submit" >Search</button>
+        <button type="submit" class="btn btn-large btn-success" name="submit">Search</button>
         <input type="hidden" name="doSearch" value="1">
       </div>
     </form>

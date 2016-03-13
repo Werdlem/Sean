@@ -7,8 +7,12 @@ include('/templates/sheetboard.php');
 if (isset($_GET['sku'])){	
 	$sku = $_GET['sku'];
 	}
+	else{
+	$sku = $_POST['search_board'];	
+	$goods_in = $productDal->get_Sheetboard($sku);
+	}
 	
-		$stock = $productDal->get_sku($sku);
+		$goods_in = $productDal->get_sku($sku);
 
 	?>
 
@@ -21,7 +25,7 @@ if (isset($_GET['sku'])){
    
       <label for="product">Product</label><br />
       <input id="product" name="product" type="text" disabled="disabled" class="form-control" style="width: 47%;" value="<?php echo $sku ?>"/>
-      <span id="notesInfo"></span>
+     <span id="notesInfo"></span>
       </div>
     </form>
     <div>
@@ -41,13 +45,13 @@ if (isset($_GET['sku'])){
       </form>
     </div>
     <?php 
-//include ('/templates/modules/goods_in.php');
+include ('/templates/modules/goods_in.php');
 include ('/templates/modules/goods_out.php');
 
-$total = $goods_in_amt - $goods_out_amt;
+$total = $goods_in_amt + $total_goods_out;
 
 
-echo '<label for="total" style="position:absolute; margin-left: -404px; margin-top: -125px">Total in Stock: '. $total . '</label>';
+echo '<label for="total" style="position:absolute; margin-top:-150px" >Total in Stock: '. $total . '</label>';
  
  echo ' </div>';
 echo '</div>';

@@ -312,19 +312,20 @@ class products{
 		$stmt = $pdo->prepare('
 			Select *
 			from goods_in
-			where sku like :stmt
+			where sku in(select sku from products where sku like :stmt)
 			having qty_received <> "0.00"
 			order by delivery_date desc
 			limit 10
 			
 		');
 		$stmt->bindValue(':stmt', $sku);
+		$stmt->bindValue(':stmt', $sku);
 		$stmt->execute();
 		if($stmt->rowCount()>0) {
 		return $stmt->fetchAll(PDO::FETCH_ASSOC);
 		}
 		else{
-			die();
+			
 			}
 	}
 	
@@ -342,7 +343,7 @@ class products{
 		
 	}
 	
-	public function Goods_In_Total($sku){
+	public function Goods_In_Total($total){
 		$pdo = Database::DB();
 		$stmt = $pdo->prepare('select 
 		coalesce(sum(qty_received),0) as total
@@ -350,7 +351,7 @@ class products{
 		group by sku
 		having sku = ?
 		');
-		$stmt->bindValue(1, $sku);
+		$stmt->bindValue(1, $total);
 		$stmt->execute();
 		
 		$results = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -385,7 +386,7 @@ class products{
 	public function total($sku){
 		$pdo = Database::DB();
 		$stmt = $pdo->prepare('select 
-		coalesce(sum(qty_out),0) - coalesce(sum(qty_in),0) as total
+		coalesce(sum(qty_in),0) - coalesce(sum(qty_out),0) as total
 		from stock_adjustment		
 		where
 		stock_adjustment.sku like (?)
@@ -503,16 +504,12 @@ class products{
 		}
 	}
 	
-	public function qty_instock($selection){
+	public function Qty_Instock($selection){
 			$pdo = Database::DB();
-			$stmt = $pdo->prepare('select
-				sum(qty_received) - (select sum(qty_delivered) 
-				from goods_out
- 				where sku like (?)) as total
-				from goods_in 
+			$stmt = $pdo->prepare('select sum(qty_delivered) as total
+				from goods_out 
 				where sku like (?)');
 				$stmt->bindValue(1, '%'.$selection.'%');
-				$stmt->bindValue(2, '%'.$selection.'%');
 				$stmt->execute();
 				while($row = $stmt->fetchALL(PDO::FETCH_ASSOC))
 		{
@@ -520,13 +517,13 @@ class products{
 		}
 			}
 			
-			public function Qty_In_Stock($stk){
+			public function Qty_In_Stock($total){
 			$pdo = Database::DB();
 			$stmt = $pdo->prepare('select 
 		sum(qty_in) - sum(qty_out) as amount
 		from stock_adjustment
 		where sku = ?');
-				$stmt->bindValue(1, $stk);				
+				$stmt->bindValue(1, $total);				
 				$stmt->execute();
 		$results = $stmt->fetch(PDO::FETCH_ASSOC);
 		{

@@ -1,6 +1,7 @@
 <?php 
 $goods_out = $productDal->get_Movement($sku);
 $total = $productDal->total($sku);
+$qty_delivered = $productDal->Qty_Instock($sku);
 ?>
 <table class="table" style="width:48%; float:right">
   <td style="border-bottom:none; float:right"><h3>Adjustment</h3></td>
@@ -13,9 +14,11 @@ $total = $productDal->total($sku);
     <tr>
    <?php
   
-    if ($total){foreach ($total as $goods_out_amt){$goods_out_amt;}} else {echo '0';} ?>
-     <?php 
-	 if (!$goods_out);else{
+    if ($total){foreach ($total as $goods_out_amt){$goods_out_amt;}} else {echo '0';}
+	if ($qty_delivered){ foreach ($qty_delivered as $qty_total){  $qty_total['total'];}}
+	$total_goods_out = $goods_out_amt - $qty_total['total'];	
+	 
+     if (!$goods_out);else{
 	 foreach ($goods_out as $result){
 		?>
      <td ><?php echo $result['date']?></td>
