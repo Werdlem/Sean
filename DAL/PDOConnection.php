@@ -312,14 +312,13 @@ class products{
 		$stmt = $pdo->prepare('
 			Select *
 			from goods_in
-			where sku in(select sku from products where sku like :stmt)
+			where sku like :stmt
 			having qty_received <> "0.00"
 			order by delivery_date desc
-			limit 10
-			
+			limit 10			
 		');
 		$stmt->bindValue(':stmt', $sku);
-		$stmt->bindValue(':stmt', $sku);
+		//$stmt->bindValue(':stmt', $sku);
 		$stmt->execute();
 		if($stmt->rowCount()>0) {
 		return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -508,8 +507,9 @@ class products{
 			$pdo = Database::DB();
 			$stmt = $pdo->prepare('select sum(qty_delivered) as total
 				from goods_out 
-				where sku like (?)');
+				where sku in(select alias_1 fropm products where sku like (?)) like (?)');
 				$stmt->bindValue(1, '%'.$selection.'%');
+				$stmt->bindValue(2, '%'.$selection.'%');				
 				$stmt->execute();
 				while($row = $stmt->fetchALL(PDO::FETCH_ASSOC))
 		{

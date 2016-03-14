@@ -14,8 +14,8 @@ $qty_delivered = $productDal->Qty_Instock($sku);
     <tr>
    <?php
   
-    if ($total){foreach ($total as $goods_out_amt){$goods_out_amt;}} else {echo '0';}
-	if ($qty_delivered){ foreach ($qty_delivered as $qty_total){  $qty_total['total'];}}
+    if ($total){foreach ($total as $goods_out_amt){ $goods_out_amt;}} else {echo '0';}
+	if ($qty_delivered){ foreach ($qty_delivered as $qty_total){ $qty_total['total'];}}
 	$total_goods_out = $goods_out_amt - $qty_total['total'];	
 	 
      if (!$goods_out);else{
