@@ -47,6 +47,8 @@ if (isset($_GET['sku'])){
     <?php 
 include ('/templates/modules/goods_in.php');
 include ('/templates/modules/goods_out.php');
+echo $goods_in_amt;
+echo $total_goods_out;
 
 $total = $goods_in_amt + $total_goods_out;
 

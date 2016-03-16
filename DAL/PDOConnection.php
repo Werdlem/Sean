@@ -347,10 +347,12 @@ class products{
 		$stmt = $pdo->prepare('select 
 		coalesce(sum(qty_received),0) as total
 		from goods_in
-		group by sku
-		having sku = ?
+		left join products on goods_in.sku=products.sku
+		
+		where (goods_in.sku = ? or products.alias_2 = ?)
 		');
 		$stmt->bindValue(1, $total);
+		$stmt->bindValue(2, $total);
 		$stmt->execute();
 		
 		$results = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -382,7 +384,7 @@ class products{
 			}
 	}
 	
-	public function total($sku){
+	public function total($sku){ //Stock adjustment total
 		$pdo = Database::DB();
 		$stmt = $pdo->prepare('select 
 		coalesce(sum(qty_in),0) - coalesce(sum(qty_out),0) as total
@@ -506,10 +508,11 @@ class products{
 	public function Qty_Instock($selection){
 			$pdo = Database::DB();
 			$stmt = $pdo->prepare('select sum(qty_delivered) as total
-				from goods_out 
-				where sku in(select alias_1 fropm products where sku like (?)) like (?)');
+				from goods_out
+				inner join products on goods_out.sku = products.sku 
+				where goods_out.sku like (?)');
 				$stmt->bindValue(1, '%'.$selection.'%');
-				$stmt->bindValue(2, '%'.$selection.'%');				
+				//$stmt->bindValue(2, '%'.$selection.'%');			
 				$stmt->execute();
 				while($row = $stmt->fetchALL(PDO::FETCH_ASSOC))
 		{
@@ -529,8 +532,21 @@ class products{
 		{
 			return $results;		
 		}
-		
-		
+			}
+			
+			public function Total_Stock($sku){
+			$pdo = Database::DB();
+			$stmt = $pdo->prepare('select
+			sum(qty_received) - (select sum(qty_delivered) from goods_out			
+			from goods_in
+			where sku like (?)');
+			$stmt->bindValue(1, $sku);
+			//$stmt->bindValue(2, $sku);				
+			$stmt->execute();
+		$results = $stmt->fetch(PDO::FETCH_ASSOC);
+		{
+			return $results;		
+		}
 			}
 
 

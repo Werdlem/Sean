@@ -58,6 +58,11 @@ foreach ($fetch as $result){ ?>
     <?php
 $total = $result['sku'];
 $selection = $result['sku'];
+//$test = $result['sku']; //<--------------possible improvment
+//$test_qty = $productDal->Total_Stock($test);
+
+//foreach ($test_qty as $qty){ echo $qty['qty'];}
+
 $last_qty = $productDal->goods_in_last_total($total);
 $adjustment_total = $productDal->Stock_Adjustment_Total($total);
 $sku_total = $productDal->Goods_in_total($total);
@@ -72,7 +77,7 @@ foreach ($last_qty as $last_qty_result){ $percentage  = (50 / 100) * $last_qty_r
     <td style="text-align:center; */"><?php $Total_stock = $goods_in_amt - $amt;
 	
 	
-$amount = $goods_in_amt - ($qty_in_total['total']+ $amt);
+$amount = $goods_in_amt - ($qty_in_total['total'] + $amt);
 echo $amount;
 
 	?>
