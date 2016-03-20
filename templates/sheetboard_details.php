@@ -9,7 +9,7 @@ if (isset($_GET['sku'])){
 	}
 	else{
 	$sku = $_POST['search_board'];	
-	$goods_in = $productDal->get_Sheetboard($sku);
+	$goods_in = $productDal->get_GoodsIn_Sku($sku);
 	}
 	
 		$goods_in = $productDal->get_sku($sku);
@@ -24,7 +24,8 @@ if (isset($_GET['sku'])){
     <div>
    
       <label for="product">Product</label><br />
-      <input id="product" name="product" type="text" disabled="disabled" class="form-control" style="width: 47%;" value="<?php echo $sku ?>"/>
+      <a href="?action=add_product_location&search=<?php echo $sku ?>">
+      <input id="product" name="product" type="text" disabled="disabled" class="form-control" style="width: 47%;" value="<?php echo $sku ?>"/></a>
      <span id="notesInfo"></span>
       </div>
     </form>
@@ -47,10 +48,8 @@ if (isset($_GET['sku'])){
     <?php 
 include ('/templates/modules/goods_in.php');
 include ('/templates/modules/goods_out.php');
-echo $goods_in_amt;
-echo $total_goods_out;
 
-$total = $goods_in_amt + $total_goods_out;
+$total = $goods_in_amt - $total_goods_out;
 
 
 echo '<label for="total" style="position:absolute; margin-top:-150px" >Total in Stock: '. $total . '</label>';

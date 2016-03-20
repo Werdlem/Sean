@@ -12,7 +12,7 @@ require_once "DAL/settings.php";
 	 //date_default_timezone_set('UTC');
 	$today = date('Y-m-d');
 				
-				$sheetboardOrder->sku_order($sku_id, $today);
+				$sheetboardOrder->sku_order($today, $sku_id);
 	 
 	 }
   

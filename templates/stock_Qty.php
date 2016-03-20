@@ -78,11 +78,16 @@ foreach ($last_qty as $last_qty_result){ $percentage  = (50 / 100) * $last_qty_r
 	
 	
 $amount = $goods_in_amt - ($qty_in_total['total'] + $amt);
-echo $amount;
 
+if ($amount < $result['buffer_qty']){
+	echo '<strong style="color: red;">'. $amount;
+	}
+	else{
+echo $amount;
+	}
 	?>
 	</td>
-    <td style="text-align:center"><a href="?action=send&sku=<?php echo $result['sku'];?>" class="btn btn-large btn-primary">Order</a></td>
+    <td style="text-align:center"><a href="?action=test_send&sku=<?php echo $result['sku'];?>" class="btn btn-large btn-primary">Order</a></td>
     
   <?php }
 }

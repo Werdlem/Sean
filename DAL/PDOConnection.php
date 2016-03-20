@@ -34,7 +34,7 @@ class products{
 		}
 		else{
 			die("<div class='alert alert-danger' role='alert'>The Product '".$fetch."' Could not be found. please click
-			<a href='?action=update&search=".$fetch."'>here</a> to add it to the database!</div></div></ br></br>");
+			<a href='?action=add_product_location&search=".$fetch."'>here</a> to add it to the database!</div></div></ br></br>");
 			}
 	}
 	
@@ -193,15 +193,16 @@ class products{
 			$stmt->execute();
 		}
 		
-		public function sku_order($sku_id, $today){
+		public function sku_order($today, $sku_id){
 		$pdo = Database::DB();
-		$stmt = $pdo->prepare('insert into
-		order_history (sku_id, date)
-		values(?,?)
-		
+		$stmt = $pdo->prepare('update 
+		products 
+		set last_order_date = ?
+		where
+		sku_id like ?
 		');
-		$stmt->bindValue(1, $sku_id);
-		$stmt->bindValue(2, $today);
+		$stmt->bindValue(1, $today);
+		$stmt->bindValue(2, $sku_id);
 		$stmt->execute();
 		}
 		
@@ -307,7 +308,7 @@ class products{
 		}
 	}
 	
-	public function get_Sheetboard($sku){
+	public function get_GoodsIn_Sku($sku){
 		$pdo = Database::DB();
 		$stmt = $pdo->prepare('
 			Select *
@@ -318,7 +319,6 @@ class products{
 			limit 10			
 		');
 		$stmt->bindValue(':stmt', $sku);
-		//$stmt->bindValue(':stmt', $sku);
 		$stmt->execute();
 		if($stmt->rowCount()>0) {
 		return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -347,12 +347,11 @@ class products{
 		$stmt = $pdo->prepare('select 
 		coalesce(sum(qty_received),0) as total
 		from goods_in
-		left join products on goods_in.sku=products.sku
-		
-		where (goods_in.sku = ? or products.alias_2 = ?)
+		group by sku
+		having sku = ?
 		');
 		$stmt->bindValue(1, $total);
-		$stmt->bindValue(2, $total);
+		//$stmt->bindValue(2, $sku);
 		$stmt->execute();
 		
 		$results = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -520,6 +519,19 @@ class products{
 		}
 			}
 			
+			public function Qty_Delivered($selection){
+			$pdo = Database::DB();
+			$stmt = $pdo->prepare('select sum(qty_delivered) as total
+				from goods_out
+				where goods_out.sku like (?)');
+				$stmt->bindValue(1, '%'.$selection.'%');		
+				$stmt->execute();
+				while($row = $stmt->fetchALL(PDO::FETCH_ASSOC))
+		{
+			return $row;
+		}
+			}
+			
 			public function Qty_In_Stock($total){
 			$pdo = Database::DB();
 			$stmt = $pdo->prepare('select 
@@ -548,6 +560,50 @@ class products{
 			return $results;		
 		}
 			}
+			
+	public function select($supplier_name, $dateFrom, $dateTo){
+	$pdo = Database::DB();
+	$stmt = $pdo->prepare('
+	select *
+	from supplier_details
+	where name like (?)
+	and next_due > (?)
+	and next_due < (?)
+	order by next_due DESC
+	');
+	$stmt->bindValue(1 , "%".$supplier_name."%");
+	$stmt->bindValue(2 ,$dateFrom);
+	$stmt->bindValue(3 ,$dateTo);
+	$stmt->execute();
+	if($stmt->rowCount()> 'null')
+	{
+			while($results = $stmt->fetchAll(PDO::FETCH_ASSOC))
+		{
+			return $results;
+		}
+			}
+		else{
+			die ("No Results");
+			}		
+		}
+		
+		public function Add_Allocation($allocation){
+		$pdo = Database::DB();
+		try{
+		$stmt = $pdo->prepare('insert into
+		stock_allocation (name)
+		values(?)
+		');
+		$stmt->bindValue(1, $allocation);
+		$stmt->execute();
+		
+		echo '</div><div class="alert alert-success" role="alert">The customer '.$allocation . ' has been sucessfully added!</div>';	}
+		catch (PDOException $e){
+		{
+			echo '</div><div class="alert alert-danger" role="alert">the customer '.$allocation . ' appears to have been entered already</div>';
+			}
+		}
+	}
 
 
 	//--------------------------------------------------------------------------------------------------------------------------------------------------//
@@ -769,29 +825,5 @@ class products{
 }
 	}
 	
-	public function select($supplier_name, $dateFrom, $dateTo){
-	$pdo = Database::DB();
-	$stmt = $pdo->prepare('
-	select *
-	from supplier_details
-	where name like (?)
-	and next_due > (?)
-	and next_due < (?)
-	order by next_due DESC
-	');
-	$stmt->bindValue(1 , "%".$supplier_name."%");
-	$stmt->bindValue(2 ,$dateFrom);
-	$stmt->bindValue(3 ,$dateTo);
-	$stmt->execute();
-	if($stmt->rowCount()> 'null')
-	{
-			while($results = $stmt->fetchAll(PDO::FETCH_ASSOC))
-		{
-			return $results;
-		}
-			}
-		else{
-			die ("No Results");
-			}		
-		}
+
 }
