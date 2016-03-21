@@ -344,7 +344,7 @@ class products{
 	
 	public function Goods_In_Total($total){
 		$pdo = Database::DB();
-		$stmt = $pdo->prepare('select 
+		$stmt = $pdo->prepare('select *,
 		coalesce(sum(qty_received),0) as total
 		from goods_in
 		group by sku
