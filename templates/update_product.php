@@ -8,7 +8,7 @@ $productDal = new products();
 
 
 $sku = $_GET['sku'];
-$sku_id = $_GET['sku_id'];
+//$sku_id = $_GET['sku_id'];
 	
 $sku = $productDal->GetProducts($sku);
 	foreach($sku as $productDetail){
@@ -59,6 +59,7 @@ $sku = $productDal->GetProducts($sku);
         <?php $product = $productDal->Get_Allocation();
 	  $dropdown = "<select style='width:90%' name='allocation_id' id='allocation_id' onchange='select()'>";
 	  			$dropdown.="\r\n<option value='{$productDetail['allocation_id']}'>{$productDetail['name']}</option>";
+				$dropdown.="\r\n<option value='0'>None</option>";
 	  foreach ($product as $result){
 		  $dropdown .="\r\n<option value='{$result['allocation_id']}'>{$result['name']}</option>";
 		  }

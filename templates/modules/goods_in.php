@@ -1,6 +1,12 @@
 <?php 
-$goods_in = $productDal->get_GoodsIn_Sku($sku);
+$goods_in = $productDal->get_Goods_In_Sku($sku);
 $total = $productDal->Goods_In_Total($sku);
+if (!$total){
+		$goods_in_amt = 0;
+		}
+		else{
+		foreach ($total as $goods_in_amt){$goods_in_amt; }
+		}
 
 ?>
 
@@ -12,21 +18,13 @@ $total = $productDal->Goods_In_Total($sku);
     <td style="text-align:center">Qty</td>
   </tr>
   <tr>
-    <?php 
-	if (!$total){
-		$goods_in_amt = 0;
-		}
-		else{
-		foreach ($total as $goods_in_amt){$goods_in_amt; //<----- total amount received stored as a variable for use on sheetboard_details
-	
-			foreach ($goods_in as $Result);
+    <?php
+			foreach ($goods_in as $Result)
 		{?>
     <td><?php echo $Result['delivery_date']?></td>
     <td style="text-align:center"><?php echo $Result['qty_received']?></td>
   </tr>
-  <?php 
-			}
-			}
+  <?php			
 		}
 		
 	

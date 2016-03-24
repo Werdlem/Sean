@@ -29,9 +29,7 @@ $productDal = new products()
             
         </tr>
         <?php
-
-
-    }
+        }
     ?>
     <tr>
             

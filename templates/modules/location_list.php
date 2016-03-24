@@ -1,19 +1,16 @@
 <?php
 
 $productsDal = new products;
+$sku = $_GET['sku'];
+ $sku_id = $productDetail['sku_id'];
 
 $sku_id = $productsDal->fetchProductbyId($sku_id);
 ?>
 
 <div class="panel panel-primary" style="width:24%; float:right">
   <div class="panel-heading" style="text-align:center">
-  <?php if ($_GET['sku_id'] == ''){
-	  echo '<h3> List of Empty Locations</h3>';
-	  } 
-	  else
-	  {
-		  echo '<h3>List of Locations</h3>';
-		  }?>
+  <?php echo '<h3>List of Locations</h3>';
+		  ?>
   </div>
   <div class="panel-body">
     <form method="post" action="?action=action&deleteLocation&product=<?php echo $productDetail['sku'];?>&product_id=<?php echo $productDetail['sku_id'];?>">
@@ -22,6 +19,7 @@ $sku_id = $productsDal->fetchProductbyId($sku_id);
 else { 
 foreach ($sku_id as $results)
 {
+	
 	?>
       <tr>
         <td style="vertical-align:middle"><?php echo $results['location_name']; ?></td>

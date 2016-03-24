@@ -9,7 +9,7 @@ if (isset($_GET['sku'])){
 	}
 	else{
 	$sku = $_POST['search_board'];	
-	$goods_in = $productDal->get_GoodsIn_Sku($sku);
+	$goods_in = $productDal->get_Goods_In_Sku($sku);
 	}
 	
 		$goods_in = $productDal->get_sku($sku);
@@ -24,7 +24,7 @@ if (isset($_GET['sku'])){
     <div>
    
       <label for="product">Product</label><br />
-      <a href="?action=add_product_location&search=<?php echo $sku ?>">
+      <a href="?action=update_product&sku=<?php echo $sku ?>&sku_id=">
       <input id="product" name="product" type="text" disabled="disabled" class="form-control" style="width: 47%;" value="<?php echo $sku ?>"/></a>
      <span id="notesInfo"></span>
       </div>

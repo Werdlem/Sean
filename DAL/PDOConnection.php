@@ -45,11 +45,14 @@ class products{
 			left join stock_allocation on products.allocation_id=stock_allocation.allocation_id
 			where sku = :stmt');
 		$stmt->bindValue(':stmt', $sku);
-		$stmt->execute();				
-		while($row = $stmt->fetchAll(PDO::FETCH_ASSOC))
-		{
-			return $row;
+		$stmt->execute();
+		if($stmt->rowCount()>0) {
+		return $stmt->fetchAll(PDO::FETCH_ASSOC);
 		}
+		else{
+			die("<div class='alert alert-danger' role='alert'>The Product '".$sku."' Could not be found. please click
+			<a href='?action=add_product_location&search=".$sku."'>here</a> to add it to the database!</div></div></ br></br>");
+			}
 	}
 	
 	public function fetchProductbyId($sku_id){
@@ -308,7 +311,7 @@ class products{
 		}
 	}
 	
-	public function get_GoodsIn_Sku($sku){
+	public function get_Goods_In_Sku($sku){
 		$pdo = Database::DB();
 		$stmt = $pdo->prepare('
 			Select *
@@ -344,7 +347,7 @@ class products{
 	
 	public function Goods_In_Total($total){
 		$pdo = Database::DB();
-		$stmt = $pdo->prepare('select *,
+		$stmt = $pdo->prepare('select
 		coalesce(sum(qty_received),0) as total
 		from goods_in
 		group by sku
@@ -507,8 +510,7 @@ class products{
 	public function Qty_Instock($selection){
 			$pdo = Database::DB();
 			$stmt = $pdo->prepare('select sum(qty_delivered) as total
-				from goods_out
-				inner join products on goods_out.sku = products.sku 
+				from goods_out 
 				where goods_out.sku like (?)');
 				$stmt->bindValue(1, '%'.$selection.'%');
 				//$stmt->bindValue(2, '%'.$selection.'%');			
@@ -523,8 +525,9 @@ class products{
 			$pdo = Database::DB();
 			$stmt = $pdo->prepare('select sum(qty_delivered) as total
 				from goods_out
-				where goods_out.sku like (?)');
-				$stmt->bindValue(1, '%'.$selection.'%');		
+				where (goods_out.sku like (?) or goods_out.desc2 like (?))');
+				$stmt->bindValue(1, '%'.$selection.'%');
+				$stmt->bindValue(2, '%'.$selection.'%');		
 				$stmt->execute();
 				while($row = $stmt->fetchALL(PDO::FETCH_ASSOC))
 		{
