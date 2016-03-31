@@ -58,7 +58,7 @@ if(isset($_POST['doSearch'])){
 			else{
 			$productDal = new products;
 			$fetch = $_POST['search_sku'];
-			$fetch = $productDal->Search($fetch);
+			$fetch = $productDal->Search($fetch, $fetch);
 					}
 		}	
 			if ($_POST['doSearch']==2){					
@@ -83,8 +83,7 @@ if(isset($_POST['doSearch'])){
       </div>
       
       <p>Product: <a href="?action=update_product&sku=<?php echo $result['sku']; ?>&sku_id=<?php echo $result['sku_id']; ?>"><?php echo
-	  $result['sku'];?></a>
-	  
+	  $result['sku'];?></a>	  
 	  <?php 
 				//PRODUCT EDIT AND LOCATION ASSIGN				
 				if ($result['sku'] == null){ 
@@ -98,7 +97,7 @@ if(isset($_POST['doSearch'])){
                 
                 Location: <?php echo $result['location_name'];?>
                 </strong>
-				
+               		
 				<?php 
 				// lOCATION ADD PRODUCT AND ASSIGN PRODUCT
 				if ($result['location_id']>0){ 
@@ -108,8 +107,9 @@ if(isset($_POST['doSearch'])){
 				}
 				?>
                 </p>
-                <p>Last Ordered: <?php echo $result['last_order_date']?> &nbsp | &nbsp Quantity: <?php echo $result['stock_qty'] ?></p>
-                <p>Notes: <?php echo $result['description']?></p>
+                 <p>Alias 1: <?php echo $result['alias_1'];?>
+                <p>Last Ordered: <?php echo $result['last_order_date']?> 
+                <p>Notes: <?php echo $result['notes']?></p>
 				<?php
                 if(!$result['sku']){
 				die;

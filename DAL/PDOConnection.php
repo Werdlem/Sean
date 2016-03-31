@@ -18,15 +18,16 @@ class Database
 
 class products{	
 	
-	public function Search($fetch){
+	public function Search($fetch,$fetch){
 		$pdo = Database::DB();
 		$stmt = $pdo->prepare('
 			Select *
 			from products
 			left join location 
 			on location.sku_id=products.sku_id
-			where sku like :stmt
+			where (sku like :stmt) or (alias_1 like :stmt)
 		');
+		$stmt->bindValue(':stmt', "%".$fetch."%");
 		$stmt->bindValue(':stmt', "%".$fetch."%");
 		$stmt->execute();
 		if($stmt->rowCount()>0) {
@@ -496,7 +497,8 @@ class products{
 		$pdo = Database::DB();
 		$stmt = $pdo->prepare('select *
 		from products
-		where allocation_id=(?)');
+		where allocation_id=(?)
+		order by sku asc');
 		$stmt->bindValue(1 ,$fetch);
 	$stmt->execute();
 	if ($stmt->rowCount()> 'null'){
@@ -607,7 +609,60 @@ class products{
 			}
 		}
 	}
-
+	
+	
+	
+	//------------------------------------------------------GOODS_OUT_QUERY------------------------------------------------------------------------------//
+	
+	public function Get_All($sku){
+	$pdo = Database::DB();
+		$stmt = $pdo->prepare('
+		select *
+				from goods_in
+			left join products on goods_in.sku = products.sku
+				where goods_in.sku like (?)
+				group by goods_in.sku			
+		');
+		$stmt->bindValue(1, $sku);
+		$stmt->execute();
+		if($stmt->rowCount()>0) {
+		return $stmt->fetchAll(PDO::FETCH_ASSOC);
+		}
+		else{
+			
+			}
+}
+	public function Goods_Out_total($sku, $alias1, $alias2, $alias3, $sku, $alias1, $alias2, $alias3){
+		$pdo = Database::DB();
+		$stmt = $pdo->prepare('select *, sum(qty_delivered) as total 
+		from goods_out
+		where 
+		(sku like (?)) or
+		(sku like (?)) or
+		(sku like (?)) or
+		(sku like (?)) or
+		(desc1 like (?)) or
+		(desc1 like (?)) or
+		(desc1 like (?)) or
+		(desc1 like (?))
+	
+		');
+		$stmt->bindValue(1, $sku);
+		$stmt->bindValue(2, '%'.$alias1.'%');
+		$stmt->bindValue(3, '%'.$alias2.'%');
+		$stmt->bindValue(4, '%'.$alias3.'%');
+		$stmt->bindValue(5, '%'.$sku.'%');
+		$stmt->bindValue(6, '%'.$alias1.'%');
+		$stmt->bindValue(7, '%'.$alias2.'%');
+		$stmt->bindValue(8, '%'.$alias3.'%');
+		$stmt->execute();
+		if($stmt->rowCount()>0) {
+		return $stmt->fetchAll(PDO::FETCH_ASSOC);
+		}
+		else{
+			
+			}			
+		}
 
 	//--------------------------------------------------------------------------------------------------------------------------------------------------//
 	

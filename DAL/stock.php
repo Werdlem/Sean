@@ -24,7 +24,8 @@ public function Get_All($sku){
 		select *
 				from goods_in
 			left join products on goods_in.sku = products.sku
-				where goods_in.sku like (?)			
+				where goods_in.sku like (?)
+				group by goods_in.sku			
 		');
 		$stmt->bindValue(1, $sku);
 		$stmt->execute();
@@ -49,5 +50,38 @@ public function goods_in_sku(){
 			}
 		}
 	}
+	
+	public function Goods_Out_total($sku, $alias1, $alias2, $alias3, $sku, $alias1, $alias2, $alias3){
+		$pdo = Database::DB();
+		$stmt = $pdo->prepare('select *, sum(qty_delivered) as total 
+		from goods_out
+		where 
+		(sku like (?)) or
+		(sku like (?)) or
+		(sku like (?)) or
+		(sku like (?)) or
+		(desc1 like (?)) or
+		(desc1 like (?)) or
+		(desc1 like (?)) or
+		(desc1 like (?))
+	
+		');
+		$stmt->bindValue(1, $sku);
+		$stmt->bindValue(2, '%'.$alias1.'%');
+		$stmt->bindValue(3, '%'.$alias2.'%');
+		$stmt->bindValue(4, '%'.$alias3.'%');
+		$stmt->bindValue(5, '%'.$sku.'%');
+		$stmt->bindValue(6, '%'.$alias1.'%');
+		$stmt->bindValue(7, '%'.$alias2.'%');
+		$stmt->bindValue(8, '%'.$alias3.'%');
+		$stmt->execute();
+		if($stmt->rowCount()>0) {
+		return $stmt->fetchAll(PDO::FETCH_ASSOC);
+		}
+		else{
+			
+			}			
+		}
+		
 
 }

@@ -19,14 +19,20 @@ if (!$total){
   </tr>
   <tr>
     <?php
-			foreach ($goods_in as $Result)
+	if (!$goods_in){
+		
+		}
+		else{
+			foreach ($goods_in as $Result){
+				
 		{?>
     <td><?php echo $Result['delivery_date']?></td>
     <td style="text-align:center"><?php echo $Result['qty_received']?></td>
   </tr>
   <?php			
+		}	
+			}
 		}
-		
 	
 	?>
 </table>

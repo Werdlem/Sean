@@ -1,11 +1,62 @@
-<?php 
-$goods_out = $productDal->get_Movement($sku);
-$total = $productDal->total($sku);
-$qty_delivered = $productDal->Qty_Delivered($sku);
+<?php
+
+//----------------------------------------GOODS_OUT_TOTAL--------------------------------//
+
+$goods_in = $productDal->Get_All($sku);
+
+	 foreach ($goods_in as $result){
+		 $sku = $result['sku'];
+		 $alias1 = $result['alias_1'];
+		 $alias2 = $result['alias_2'];
+		 $alias3 = $result['alias_3'];
+		 
+		 if ($sku == ''){
+			 $sku = 'null';
+			 }
+		 else{
+			 $alias3 = $result['alias_3'];
+			 }		 
+		 if ($alias3 == ''){
+			 $alias3 = 'null';
+			 }
+		 else{
+			 $alias3 = $result['alias_3'];
+			 }
+		 if ($alias1 == ''){
+			 $alias1 = 'null';
+			 }
+		 else{
+			 $alias1 = $result['alias_1'];
+			 }
+			 if ($alias2 == ''){
+			 $alias2 = 'null';
+			 }
+		 else{
+			 $alias2 = $result['alias_2'];
+			 }
+		 
+		 
+		 $goods_out = $productDal->Goods_Out_total($sku, $alias1, $alias2, $alias3, $sku, $alias1, $alias2, $alias3);
+		 foreach ($goods_out as $goods_out_result)
+		 {
+			
+			 }
+				
+		
+		 } 
+
+//--------------------------------------------------------------------------------------//
+
+
+
+
  
+$goods_out_movement = $productDal->get_Movement($sku);
+$total = $productDal->total($sku);
+
 if ($total){foreach ($total as $goods_out_amt){ $goods_out_amt;}} else {echo '0';}
-if ($qty_delivered){ foreach ($qty_delivered as $qty_total){ $qty_total['total'];}}
-	$total_goods_out = $qty_total['total'] - $goods_out_amt;
+	$total_goods_out = $goods_out_result['total'] - $goods_out_amt;
+	
 ?>
 <table class="table" style="width:48%; float:right">
   <td style="border-bottom:none; float:right"><h3>Adjustment</h3></td>
@@ -17,8 +68,8 @@ if ($qty_delivered){ foreach ($qty_delivered as $qty_total){ $qty_total['total']
     </tr>
     <tr>
    <?php
-     if (!$goods_out);else{
-	 foreach ($goods_out as $result){
+     if (!$goods_out_movement);else{
+	 foreach ($goods_out_movement as $result){
 		?>
      <td ><?php echo $result['date']?></td>
       <td style="text-align:center"><?php echo $result['qty_out']?></td>

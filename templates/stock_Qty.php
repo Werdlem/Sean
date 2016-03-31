@@ -52,7 +52,7 @@ $fetch = $productDal->Get_Allocation();
   
 
 foreach ($fetch as $result){ ?>
-  <tr>
+  <tr style="">
     <td style=""><a href="?action=sheetboard_details&sku=<?php echo $result['sku'];?>"><?php echo $result['sku']; ?></a></td>
     <td style="text-align:center"><?php if ($result['last_order_date'] < '(NULL)') { echo '';} else{ echo date('d-m-Y',strtotime($result['last_order_date']));} ?></td>
     <?php
@@ -61,7 +61,52 @@ $selection = $result['sku'];
 $last_qty = $productDal->goods_in_last_total($total);
 $adjustment_total = $productDal->Stock_Adjustment_Total($total);
 $sku_total = $productDal->Goods_in_total($total);
-$qty_in = $productDal->Qty_Instock($selection);
+//$qty_in = $productDal->Qty_Instock($selection);-------------------------------------------------------------
+
+//--------------------------------------------------------------------GOODS_OUT_TOTAL---------------------------------------------------------------------------//
+
+$goods_in = $productDal->Get_All($selection);
+
+	 foreach ($goods_in as $result){
+		 $sku = $result['sku'];
+		 $alias1 = $result['alias_1'];
+		 $alias2 = $result['alias_2'];
+		 $alias3 = $result['alias_3'];
+		 
+		 if ($alias3 == ''){
+			 $alias3 = 'null';
+			 }
+		 else{
+			 $alias3 = $result['alias_3'];
+			 }
+		 if ($alias1 == ''){
+			 $alias1 = 'null';
+			 }
+		 else{
+			 $alias1 = $result['alias_1'];
+			 }
+			 if ($alias2 == ''){
+			 $alias2 = 'null';
+			 }
+		 else{
+			 $alias2 = $result['alias_2'];
+			 }
+		 
+		 
+		 $qty_in = $productDal->Goods_Out_total($sku, $alias1, $alias2, $alias3, $sku, $alias1, $alias2, $alias3);
+		 if ($qty_in){foreach ($qty_in as $qty_in_total);{$qty_in_total['total'];}}else{ $qty_in_total = 0;};  
+		 //foreach ($qty_in as $goods_out_result)
+		 {
+			// echo $goods_out_result['total'];
+			 //echo 'SKU: '. $goods_out_result['sku'].' | &nbsp;  TOTAL STOCK OUT: '.$goods_out_result['total'].' | (description SKU : '.$goods_out_result['desc1'].')<br/>';
+			 }
+				
+		
+		 } 
+
+//--------------------------------------------------------------------------------------//
+
+//---------------------------------------------------------------------------------------------------//
 
 foreach ($last_qty as $last_qty_result){ $percentage  = (50 / 100) * $last_qty_result['qty_received'];
 	if ($adjustment_total){foreach ($adjustment_total as $amt);{ $amt;}}else{$amt = 0;} ;	
@@ -82,7 +127,7 @@ echo $amount;
 	}
 	?>
 	</td>
-    <td style="text-align:center"><a href="?action=test_send&sku=<?php echo $result['sku'];?>" class="btn btn-large btn-primary">Order</a></td>
+    <td style="text-align:center"><a href="?action=test_send&sku=<?php echo $result['sku'];?>" class="btn btn-default btn-primary">Order</a></td>
     
   <?php }
 }
