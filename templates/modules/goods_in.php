@@ -26,7 +26,7 @@ if (!$total){
 			foreach ($goods_in as $Result){
 				
 		{?>
-    <td><?php echo $Result['delivery_date']?></td>
+    <td><?php echo date('d-m-Y',strtotime($Result['delivery_date']))?></td>
     <td style="text-align:center"><?php echo $Result['qty_received']?></td>
   </tr>
   <?php			

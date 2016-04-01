@@ -4,6 +4,13 @@
 
 $goods_in = $productDal->Get_All($sku);
 
+if(!$goods_in){
+	
+	$goods_out_result['total'] = '0';
+	
+	}
+	else{
+
 	 foreach ($goods_in as $result){
 		 $sku = $result['sku'];
 		 $alias1 = $result['alias_1'];
@@ -39,17 +46,12 @@ $goods_in = $productDal->Get_All($sku);
 		 $goods_out = $productDal->Goods_Out_total($sku, $alias1, $alias2, $alias3, $sku, $alias1, $alias2, $alias3);
 		 foreach ($goods_out as $goods_out_result)
 		 {
-			
-			 }
-				
-		
-		 } 
+		 }
+	 }
+	}
+		 
 
 //--------------------------------------------------------------------------------------//
-
-
-
-
  
 $goods_out_movement = $productDal->get_Movement($sku);
 $total = $productDal->total($sku);
@@ -71,7 +73,7 @@ if ($total){foreach ($total as $goods_out_amt){ $goods_out_amt;}} else {echo '0'
      if (!$goods_out_movement);else{
 	 foreach ($goods_out_movement as $result){
 		?>
-     <td ><?php echo $result['date']?></td>
+     <td ><?php echo date('d-m-Y', strtotime($result['date']))?></td>
       <td style="text-align:center"><?php echo $result['qty_out']?></td>
       <td style="text-align:center"><?php echo $result['qty_in']?></td>
       <td style="text-align:center"><a href="?action=action&delete_line&id=<?php echo $result['id'];?>&sku=<?php echo $result['sku'] ?>">X</a></td>       
