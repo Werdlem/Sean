@@ -46,6 +46,7 @@ $fetch = $productDal->Get_Allocation();
     <td style="font-size:16px; text-align:center"><strong>Date Ordered</td>
     <td style="font-size:16px; text-align:center"><strong>Date Rec</td>
     <td style="font-size:16px; text-align:center"><strong>Stock On Hand</td>
+    <td style="font-size:16px; text-align:center; background-color: rgba(0,0,255,0.3);"><strong>Buffer Qty</td>
     <td style="font-size:16px; text-align:center"><strong>Order</td>
   </tr>
   <?php
@@ -115,20 +116,21 @@ foreach ($last_qty as $last_qty_result){ $percentage  = (50 / 100) * $last_qty_r
 	if ($qty_in){foreach ($qty_in as $qty_in_total);{$qty_in_total['total'];}}else{ $qty_in_total = 0;};  
 	?>
     <td style="text-align:center"><?php $date =  date('d-m-Y', strtotime($last_qty_result['delivery_date']));{ if (!$date){echo  '';} else{ echo $date ;} }?></td>
-    <td style="text-align:center; */"><?php $Total_stock = $goods_in_amt - $amt;
+   <?php $Total_stock = $goods_in_amt - $amt;
 	
 	
 $amount = $goods_in_amt - ($qty_in_total['total'] + $amt);
 
 if ($amount < $result['buffer_qty']){
-	echo '<strong style="color: red;">'. $amount;
+	echo '<td style="text-align:center; background-color: rgba(255,0,0,0.2);*/"><strong style="color: red; ">'. $amount;
 	}
 	else{
-echo $amount;
+echo '<td style="text-align:center; */">'.$amount;
 	}
 	?>
 	</td>
-    <td style="text-align:center"><a href="?action=test_send&sku=<?php echo $result['sku'];?>" class="btn btn-default btn-primary">Order</a></td>
+    <td style="text-align:center; color:#06F; background-color: rgba(0,0,255,0.2); "><strong><?php echo $result['buffer_qty'];?></strong></td>
+    <td style="text-align:center;"><a href="?action=test_send&sku=<?php echo $result['sku'];?>" class="btn btn-default btn-primary">Order</a></td>
     
   <?php }
 }

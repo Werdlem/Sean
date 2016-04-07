@@ -74,8 +74,8 @@ $sku = $productDal->GetProducts($sku);
        </script> 
       </div>
       <div style="width:50%; margin-left:200px">
-        <label for="supplier_id">Supplier</label>
-        <input id="supplier_id" name="supplier_id" type="text" class="form-control" value="<?php echo $productDetail['supplier_id']; ?>"/>
+        <label for="supplier_name">Supplier</label>
+        <input id="supplier_name" name="supplier_name" type="text" class="form-control" value="<?php echo $productDetail['supplier_name']; ?>"/>
       </div>
       <div>
         <label for="notes">Notes</label>

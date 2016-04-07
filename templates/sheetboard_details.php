@@ -23,9 +23,9 @@ if (isset($_GET['sku'])){
   <div class="panel-body">
     <div>
    
-      <label for="product">Product</label><br />
-      <a href="?action=update_product&sku=<?php echo $sku ?>&sku_id=">
-      <input id="product" name="product" type="text" disabled="disabled" class="form-control" style="width: 47%;" value="<?php echo $sku ?>"/></a>
+      <label for="product" style="font-size:16px"><strong>Product:</label>
+      <a href="?action=update_product&sku=<?php echo $sku ?>&sku_id=" style="font-size:16px">
+      <?php echo $sku ?></a></strong>
      <span id="notesInfo"></span>
       </div>
     </form>
@@ -52,7 +52,7 @@ include ('/templates/modules/goods_out.php');
 $total = $goods_in_amt - $total_goods_out;
 
 
-echo '<label for="total" style="position:absolute; margin-top:-150px" >Total in Stock: '. $total . '</label>';
+echo '<label for="total" style="position:absolute; margin-top:-127px; margin-left:-404px" >Total in Stock: '. $total . '</label>';
  
  echo ' </div>';
 echo '</div>';

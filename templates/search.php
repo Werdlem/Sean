@@ -107,7 +107,7 @@ if(isset($_POST['doSearch'])){
 				}
 				?>
                 </p>
-                 <p>Alias 1: <?php echo $result['alias_1'];?>
+                 <p>Alias 1: <strong><?php echo $result['alias_1'];?></strong>
                 <p>Last Ordered: <?php echo $result['last_order_date']?> 
                 <p>Notes: <?php echo $result['notes']?></p>
 				<?php

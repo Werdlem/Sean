@@ -4,6 +4,8 @@
 <body>
 <?php 
 include_once('./DAL/PDOConnection.php');
+$productDal = new products();
+
 if(isset($_GET['search'])){
 $new = $_GET['search'];
 }
@@ -41,8 +43,16 @@ else
         <input id="alias_3" name="alias_3" type="text" class="form-control" />
       </div>
         <div>
-            <label for="allocation_id">Customer/Supplier</label>
-            <input id="allocation_id" class="form-control" name="allocation_id" type="text" value="0"/> 
+            <label for="allocation_id">Allocation</label>
+            <?php 			
+			$product = $productDal->Get_Allocation();
+	  $dropdown = "<select style='width:90%' name='allocation_id' id='allocation_id' onchange='select()'>";	  			
+				$dropdown.="\r\n<option value='0'>None</option>";
+	  foreach ($product as $result){
+		  $dropdown .="\r\n<option value='{$result['allocation_id']}'>{$result['name']}</option>";
+		  }
+		  $dropdown .="\r\n</select>";
+		  echo $dropdown; ?>
             <span id="notesInfo"></span>
         </div>
         <div>

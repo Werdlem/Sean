@@ -103,16 +103,16 @@ class products{
 			}
 		}
 		
-		public function UpdateProduct($sku_id, $sku, $notes, $buffer_qty, $allocation_id, $supplier_id, $description, $alias_1, $alias_2, $alias_3, $stock_qty){
+		public function UpdateProduct($sku_id, $sku, $notes, $buffer_qty, $allocation_id, $supplier_name, $description, $alias_1, $alias_2, $alias_3, $stock_qty){
 		$pdo = Database::DB();
 		$stmt = $pdo->prepare('update products
-		set sku = :sku, notes = :notes, buffer_qty = :buffer_qty, allocation_id = :allocation_id, supplier_id = :supplier_id, description = :description, alias_1 = :alias_1, alias_2 = :alias_2, alias_3 = :alias_3, stock_qty = :stock_qty
+		set sku = :sku, notes = :notes, buffer_qty = :buffer_qty, allocation_id = :allocation_id, supplier_name = :supplier_name, description = :description, alias_1 = :alias_1, alias_2 = :alias_2, alias_3 = :alias_3, stock_qty = :stock_qty
 		where sku_id = :sku_id');		
 		$stmt->bindValue(':sku', $sku);
 		$stmt->bindValue(':notes', $notes);
 		$stmt->bindValue(':buffer_qty', $buffer_qty);
 		$stmt->bindValue(':allocation_id', $allocation_id);
-		$stmt->bindValue(':supplier_id', $supplier_id);
+		$stmt->bindValue(':supplier_name', $supplier_name);
 		$stmt->bindValue(':description', $description);
 		$stmt->bindValue(':alias_1', $alias_1);
 		$stmt->bindValue(':alias_2', $alias_2);
@@ -620,7 +620,7 @@ class products{
 		select *
 				from goods_in
 			left join products on goods_in.sku = products.sku
-				where goods_in.sku like (?)
+				where goods_in.sku like (?) 
 				group by goods_in.sku			
 		');
 		$stmt->bindValue(1, $sku);
@@ -663,6 +663,42 @@ class products{
 			
 			}			
 		}
+		
+		public function select_all(){
+		$pdo = Database::DB();
+		$stmt = $pdo->prepare('
+		select *
+		from products
+		where 
+		allocation_id > "0"						
+		');
+		$stmt->execute();
+		if($stmt->rowCount()>0) {
+		return $stmt->fetchAll(PDO::FETCH_ASSOC);
+		}
+		else{
+			
+			}
+}
+public function Low_Stock_Qty($amount){
+		$pdo = Database::DB();
+		$stmt = $pdo->prepare('
+		select *
+		from products
+		where 
+		buffer_qty > (?)
+		and 
+		allocation_id > "0"						
+		');
+		$stmt->bindValue(1, $amount);
+		$stmt->execute();
+		if($stmt->rowCount()>0) {
+		return $stmt->fetchAll(PDO::FETCH_ASSOC);
+		}
+		else{
+			
+			}
+}
 
 	//--------------------------------------------------------------------------------------------------------------------------------------------------//
 	
