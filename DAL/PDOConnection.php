@@ -18,14 +18,14 @@ class Database
 
 class products{	
 	
-	public function Search($fetch,$fetch){
+	public function Search($fetch, $fetch){
 		$pdo = Database::DB();
 		$stmt = $pdo->prepare('
 			Select *
 			from products
 			left join location 
-			on location.sku_id=products.sku_id
-			where (sku like :stmt) or (alias_1 like :stmt)
+			on products.sku_id=location.sku_id
+			where products.sku like :stmt
 		');
 		$stmt->bindValue(':stmt', "%".$fetch."%");
 		$stmt->bindValue(':stmt', "%".$fetch."%");
@@ -698,6 +698,23 @@ public function Low_Stock_Qty($amount){
 		else{
 			
 			}
+}
+
+public function New_Location($result){
+		$pdo = Database::DB();
+		try{
+		$stmt = $pdo->prepare('
+		INSERT INTO location(location_name)
+		VALUE (?)						
+		');
+		$stmt->bindValue(1, $result);
+		$stmt->execute();
+		echo '<div class="alert alert-success" role="alert">The Location '.$result . ' has been sucessfully added!</div>';	}	
+		catch (PDOException $e){
+
+				echo '<div class="alert alert-danger" role="alert"> DUPLICATE LOCATION ENTERED. SEE ERROR -----> '. $e .'</div>';
+			
+				}			
 }
 
 	//--------------------------------------------------------------------------------------------------------------------------------------------------//

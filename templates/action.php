@@ -33,6 +33,13 @@ if(isset($_POST['add_location'])){
 		echo '<div class="alert alert-success" role="alert">Product Successfully updated to Location</div>';	
 }
 
+if(isset($_POST['new_location'])){
+   $result = $_POST['location_name'];
+   		$productDal->New_Location($result);
+		//header("location:?action=update_product&sku=".$sku."&sku_id=".$sku_id);
+		//echo '<div class="alert alert-success" role="alert">Location '.$result.' successfully added</div>';	
+}
+
 if(isset($_GET['clear_location'])){	
 	$location_id = $_GET['location_id'];
    $productDal->Clear_Location($location_id);
